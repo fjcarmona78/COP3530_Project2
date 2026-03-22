@@ -17,6 +17,15 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(Catch2)
 
+# GLFW
+FetchContent_Declare(
+    glfw
+    GIT_REPOSITORY https://github.com/glfw/glfw.git
+    GIT_TAG 3.3.9
+)
+
+FetchContent_MakeAvailable(glfw)
+
 include_directories(src)
 
 add_executable(Main
@@ -26,6 +35,8 @@ add_executable(Main
         # src/AVL.h src/AVL.cpp
         )
         
+target_link_libraries(Main PRIVATE glfw opengl32)
+
 # These tests can use the Catch2-provided main
 add_executable(Tests
         test/test.cpp # your test file

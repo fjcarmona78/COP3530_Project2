@@ -35,7 +35,9 @@ struct TreeNode {
 
 
 class redBlackTree {
-	redBlackTree() : root(nullptr) {}
+public:
+	enum SortType { BY_POPULARITY, BY_REVENUE };
+	redBlackTree(SortType sortType = BY_POPULARITY) : root(nullptr), sortBy(sortType) {}
 
 	// Public member functions for the red-black tree creation and manipulation
 	void insert(TreeNode* node);
@@ -46,4 +48,5 @@ class redBlackTree {
 	long getHighestRevenueMovie();
 private:
 	TreeNode* root;
+	SortType sortBy;
 };

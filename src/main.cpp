@@ -1,4 +1,4 @@
-// Project2_CineRank.cpp : Input a CSV file and organize each movie in a red-black tree by a custom datapoint. 
+// Project2_CineRank.cpp : Input a CSV file and organize each movie in a red-black tree by a custom datapoint.
 // Data points: Movie ID, title, genre, original language, overview, popularity, production companies, release date, budget, revenue, runtime, status, tagline, voter average, voter count, credits, keywords, poster path, backdrop path, recommendations
 
 #include <iostream>
@@ -10,10 +10,9 @@ using namespace std;
 
 
 
-int main()
-{
+int main() {
 	TreeNode node;
-	
+
 	// Open the CSV file
 	ifstream file("movies.csv");
 
@@ -33,7 +32,7 @@ int main()
 		getline(ss, node.genre, ',');
 		getline(ss, node.originalLanguage, ',');
 		getline(ss, node.overview, ',');
-		
+
 		getline(ss, value, ',');
 		node.popularity = stod(value); // Convert string to double
 		getline(ss, node.productionCompanies, ',');
@@ -55,6 +54,5 @@ int main()
 		getline(ss, node.posterPath, ',');
 		getline(ss, node.backdropPath, ',');
 		getline(ss, node.recommendations);
-}
-
-
+	}
+};

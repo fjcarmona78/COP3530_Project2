@@ -59,10 +59,8 @@ SplayTree::Node* SplayTree::splay(Node* currentRoot, int rank) {
         return nullptr;
     }
 
-    Movie dummyMovie;
-    Node header(dummyMovie);
-    header.left = nullptr;
-    header.right = nullptr;
+    Movie tempMovie;
+    Node header(tempMovie);
 
     Node* leftTreeMax = &header;
     Node* rightTreeMin = &header;
@@ -143,6 +141,10 @@ void SplayTree::insert(const Movie& movie) {
 }
 
 Movie* SplayTree::search(int rank) {
+    return searchByRank(rank);
+}
+
+Movie* SplayTree::searchByRank(int rank) {
     if (root == nullptr) {
         return nullptr;
     }
@@ -156,6 +158,62 @@ Movie* SplayTree::search(int rank) {
     return nullptr;
 }
 
+Movie* SplayTree::searchById(int id) {
+    if (root == nullptr) {
+        return nullptr;
+    }
+
+    vector<Node*> stack;
+    stack.push_back(root);
+
+    while (!stack.empty()) {
+        Node* current = stack.back();
+        stack.pop_back();
+
+        if (current->data.id == id) {
+            return &(current->data);
+        }
+
+        if (current->right != nullptr) {
+            stack.push_back(current->right);
+        }
+
+        if (current->left != nullptr) {
+            stack.push_back(current->left);
+        }
+    }
+
+    return nullptr;
+}
+
+Movie* SplayTree::searchByRevenue(long long revenue) {
+    if (root == nullptr) {
+        return nullptr;
+    }
+
+    vector<Node*> stack;
+    stack.push_back(root);
+
+    while (!stack.empty()) {
+        Node* current = stack.back();
+        stack.pop_back();
+
+        if (current->data.revenue == revenue) {
+            return &(current->data);
+        }
+
+        if (current->right != nullptr) {
+            stack.push_back(current->right);
+        }
+
+        if (current->left != nullptr) {
+            stack.push_back(current->left);
+        }
+    }
+
+    return nullptr;
+}
+
 void SplayTree::inorder(Node* node) const {
     if (node == nullptr) {
         return;
@@ -164,7 +222,9 @@ void SplayTree::inorder(Node* node) const {
     inorder(node->left);
     cout << "Rank: " << node->data.popularityRank
          << " | Title: " << node->data.title
-         << " | Popularity: " << node->data.popularity << endl;
+         << " | ID: " << node->data.id
+         << " | Revenue: " << node->data.revenue
+         << endl;
     inorder(node->right);
 }
 

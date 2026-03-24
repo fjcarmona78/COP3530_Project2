@@ -16,7 +16,13 @@ void redBlackTree::insert(TreeNode* node) {
 		TreeNode* current = root;
 		while (current != nullptr) {
 			parent = current;
-			if (sortBy == BY_POPULARITY) {
+			if (sortBy == BY_MOVIEID) {
+				if (node->movieID < current->movieID) {
+					current = current->left;
+				} else {
+					current = current->right;
+				}
+			} else if (sortBy == BY_POPULARITY) {
 				if (node->popularity < current->popularity) {
 					current = current->left;
 				} else {
@@ -30,7 +36,13 @@ void redBlackTree::insert(TreeNode* node) {
 				}
 			}
 		}
-		if (sortBy == BY_POPULARITY) {
+		if (sortBy == BY_MOVIEID) {
+			if (node->movieID < parent->movieID) {
+				parent->left = node;
+			} else {
+				parent->right = node;
+			}
+		} else if (sortBy == BY_POPULARITY) {
 			if (node->popularity < parent->popularity) {
 				parent->left = node;
 			} else {
@@ -158,4 +170,65 @@ long redBlackTree::getHighestRevenueMovie() {
 		TreeNode* current = revenueTree->root;
 	}
 	return root->revenue; // The movie with the highest revenue will be at the root if sorted by revenue
+}
+
+void redBlackTree::searchByMovieID(long movieID) {
+	// Logic to search for a movie by its ID
+	TreeNode* current = root;
+	while (current != nullptr) {
+		if (current->movieID == movieID) {
+			// Movie found, print its details
+			cout << "Movie ID: " << current->movieID << endl;
+			cout << "Title: " << current->title << endl;
+			cout << "Genre: " << current->genre << endl;
+			cout << "Original Language: " << current->originalLanguage << endl;
+			cout << "Overview: " << current->overview << endl;
+			cout << "Popularity: " << current->popularity << endl;
+			cout << "Production Companies: " << current->productionCompanies << endl;
+			cout << "Release Date: " << current->releaseDate << endl;
+			cout << "Budget: " << current->budget << endl;
+			cout << "Revenue: " << current->revenue << endl;
+			cout << "Runtime: " << current->runtime << endl;
+			cout << "Status: " << current->status << endl;
+			cout << "Tagline: " << current->tagline << endl;
+			cout << "Voter Average: " << current->voterAverage << endl;
+			cout << "Voter Count: " << current->voterCount << endl;
+			cout << "Credits: " << current->credits << endl;
+			cout << "Keywords: " << current->keywords << endl;
+			cout << "Poster Path: " << current->posterPath << endl;
+			cout << "Backdrop Path: " << current->backdropPath << endl;
+			cout << "Recommendations: " << current->recommendations << endl;
+			return; // Exit after finding the movie
+		} else if (movieID < current->movieID) {
+			current = current->left; // Move left
+		} else {
+			current = current->right; // Move right
+		}
+	}
+	cout << "Movie with ID " << movieID << " not found." << endl; // Movie not found
+}
+
+vector <TreeNode*> redBlackTree::levelOrderTraversal() {
+	// Logic to perform level order traversal of the tree
+	// Add pointers to the first 1000 nodes in the order they are visited to the result vector
+	vector<TreeNode*> result;
+	if (root == nullptr) {
+		return result; // Return empty vector if tree is empty
+	}
+	queue<TreeNode*> q;
+	int count = 0; // Counter to keep track of the number of nodes added to the result vector
+	q.push(root);
+	while (!q.empty() && count < 1000) {
+		TreeNode* current = q.front();
+		q.pop();
+		result.push_back(current); // Add the current node to the result vector
+		count++;
+		if (current->left != nullptr) {
+			q.push(current->left); // Add left child to the queue
+		}
+		if (current->right != nullptr) {
+			q.push(current->right); // Add right child to the queue
+		}
+	}
+	return result; // Return the vector containing pointers to the first 1000 nodes in level order
 }

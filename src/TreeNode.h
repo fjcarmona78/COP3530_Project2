@@ -2,6 +2,7 @@
 
 #pragma once
 #include <string>
+#include <vector>
 using namespace std;
 
 // TreeNode class definition
@@ -36,8 +37,8 @@ struct TreeNode {
 
 class redBlackTree {
 public:
-	enum SortType { BY_POPULARITY, BY_REVENUE };
-	redBlackTree(SortType sortType = BY_POPULARITY) : root(nullptr), sortBy(sortType) {}
+	enum SortType { BY_MOVIEID, BY_POPULARITY, BY_REVENUE };
+	redBlackTree(SortType sortType = BY_MOVIEID) : root(nullptr), sortBy(sortType) {}
 
 	// Public member functions for the red-black tree creation and manipulation
 	void insert(TreeNode* node);
@@ -46,6 +47,8 @@ public:
 	void balanceInsert(TreeNode* node);
 	double getMostPopularMovie();
 	long getHighestRevenueMovie();
+	void searchByMovieID(long movieID);
+	vector <TreeNode*> levelOrderTraversal();
 private:
 	TreeNode* root;
 	SortType sortBy;

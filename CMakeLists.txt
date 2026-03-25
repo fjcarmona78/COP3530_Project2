@@ -3,10 +3,11 @@ project(Project1)
 
 set(CMAKE_CXX_STANDARD 14)
 
-#compile flags to match Gradescope test environment
-set(GCC_COVERAGE_COMPILE_FLAGS "-Wall -Werror") # remove -Wall if you don't want as many warnings treated as errors
-# gradescope does use -Werror, so if you remove it here you may run into issues when trying to submit
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}" )
+if (MSVC)
+    add_compile_options(/W3)
+else()
+    add_compile_options(-Wall -Werror)
+endif()
 
 ##pull in desired version of catch through cmake automatically, make it available
 Include(FetchContent)
@@ -34,7 +35,9 @@ add_executable(Main
         src/SplayTree.cpp
         src/SplayTree.h
         src/Parser.cpp
-        src/Parser.h # your main file
+        src/Parser.h
+        src/TreeNode.cpp
+        src/TreeNode.h # your main file
         # add your own header files below - should be automatically added in CLion
         # example (can also separate with newlines):
         # src/AVL.h src/AVL.cpp
@@ -44,7 +47,9 @@ target_link_libraries(Main PRIVATE glfw opengl32)
 
 # These tests can use the Catch2-provided main
 add_executable(Tests
-        test/test.cpp # your test file
+        test/test.cpp
+        src/TreeNode.cpp
+        src/TreeNode.h  # your test file
         # add your own header files below - should be automatically added in CLion
         # example (can also separate with newlines):
         # src/AVL.h src/AVL.cpp

@@ -1,7 +1,9 @@
 #include "TreeNode.h"
-using namespace std;
+#include <iostream>
+#include <queue>
+#include <utility>
 
-TreeNode::TreeNode() : isRed(true), left(nullptr), right(nullptr) {}
+using namespace std;
 
 redBlackTree::redBlackTree(SortType sortType) : root(nullptr), sortBy(sortType) {}
 
@@ -55,6 +57,7 @@ void redBlackTree::insert(TreeNode* node) {
 				parent->right = node;
 			}
 		}
+		node->parent = parent; // Set the parent pointer of the new node
 		balanceInsert(node); // Balance the tree after insertion
 	}
 }

@@ -27,10 +27,16 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(glfw)
 
-include_directories(src)
+include_directories(src rc/imgui src/imgui/backends)
 
 add_executable(Main
         src/main.cpp
+        src/imgui/imgui.cpp
+        src/imgui/imgui_draw.cpp
+        src/imgui/imgui_tables.cpp
+        src/imgui/imgui_widgets.cpp
+        src/imgui/backends/imgui_impl_opengl3.cpp
+        src/imgui/backends/imgui_impl_glfw.cpp
         src/Movie.h
         src/SplayTree.cpp
         src/SplayTree.h

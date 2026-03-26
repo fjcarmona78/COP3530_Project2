@@ -170,7 +170,7 @@ Movie* SplayTree::searchById(int id) {
         Node* current = stack.back();
         stack.pop_back();
 
-        if (current->data.id == id) {
+        if (current->data.movieID == id) {
             return &(current->data);
         }
 
@@ -222,7 +222,7 @@ void SplayTree::inorder(Node* node) const {
     inorder(node->left);
     cout << "Rank: " << node->data.popularityRank
          << " | Title: " << node->data.title
-         << " | ID: " << node->data.id
+         << " | ID: " << node->data.movieID
          << " | Revenue: " << node->data.revenue
          << endl;
     inorder(node->right);

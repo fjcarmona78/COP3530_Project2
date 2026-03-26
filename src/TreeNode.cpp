@@ -19,19 +19,19 @@ void redBlackTree::insert(TreeNode* node) {
 		while (current != nullptr) {
 			parent = current;
 			if (sortBy == BY_MOVIEID) {
-				if (node->movieID < current->movieID) {
+				if (node->movieData.movieID < current->movieData.movieID) {
 					current = current->left;
 				} else {
 					current = current->right;
 				}
 			} else if (sortBy == BY_POPULARITY) {
-				if (node->popularity < current->popularity) {
+				if (node->movieData.popularity < current->movieData.popularity) {
 					current = current->left;
 				} else {
 					current = current->right;
 				}
 			} else { // BY_REVENUE
-				if (node->revenue < current->revenue) {
+				if (node->movieData.revenue < current->movieData.revenue) {
 					current = current->left;
 				} else {
 					current = current->right;
@@ -39,19 +39,19 @@ void redBlackTree::insert(TreeNode* node) {
 			}
 		}
 		if (sortBy == BY_MOVIEID) {
-			if (node->movieID < parent->movieID) {
+			if (node->movieData.movieID < parent->movieData.movieID) {
 				parent->left = node;
 			} else {
 				parent->right = node;
 			}
 		} else if (sortBy == BY_POPULARITY) {
-			if (node->popularity < parent->popularity) {
+			if (node->movieData.popularity < parent->movieData.popularity) {
 				parent->left = node;
 			} else {
 				parent->right = node;
 			}
 		} else { // BY_REVENUE
-			if (node->revenue < parent->revenue) {
+			if (node->movieData.revenue < parent->movieData.revenue) {
 				parent->left = node;
 			} else {
 				parent->right = node;
@@ -155,9 +155,9 @@ double redBlackTree::getMostPopularMovie() {
 		if (popularityTree->root == nullptr) {
 			return 0.0; // No movies in the tree
 		}
-		TreeNode* current = popularityTree->root;
+		//TreeNode* current = popularityTree->root;
 	}
-	return root->popularity; // The most popular movie will be at the root if sorted by popularity
+	return root->movieData.popularity; // The most popular movie will be at the root if sorted by popularity
 	
 }	
 
@@ -170,39 +170,39 @@ long redBlackTree::getHighestRevenueMovie() {
 		if (revenueTree->root == nullptr) {
 			return 0; // No movies in the tree
 		}
-		TreeNode* current = revenueTree->root;
+		//TreeNode* current = revenueTree->root;
 	}
-	return root->revenue; // The movie with the highest revenue will be at the root if sorted by revenue
+	return root->movieData.revenue; // The movie with the highest revenue will be at the root if sorted by revenue
 }
 
 void redBlackTree::searchByMovieID(long movieID) {
 	// Logic to search for a movie by its ID
 	TreeNode* current = root;
 	while (current != nullptr) {
-		if (current->movieID == movieID) {
+		if (current->movieData.movieID == movieID) {
 			// Movie found, print its details
-			cout << "Movie ID: " << current->movieID << endl;
-			cout << "Title: " << current->title << endl;
-			cout << "Genre: " << current->genre << endl;
-			cout << "Original Language: " << current->originalLanguage << endl;
-			cout << "Overview: " << current->overview << endl;
-			cout << "Popularity: " << current->popularity << endl;
-			cout << "Production Companies: " << current->productionCompanies << endl;
-			cout << "Release Date: " << current->releaseDate << endl;
-			cout << "Budget: " << current->budget << endl;
-			cout << "Revenue: " << current->revenue << endl;
-			cout << "Runtime: " << current->runtime << endl;
-			cout << "Status: " << current->status << endl;
-			cout << "Tagline: " << current->tagline << endl;
-			cout << "Voter Average: " << current->voterAverage << endl;
-			cout << "Voter Count: " << current->voterCount << endl;
-			cout << "Credits: " << current->credits << endl;
-			cout << "Keywords: " << current->keywords << endl;
-			cout << "Poster Path: " << current->posterPath << endl;
-			cout << "Backdrop Path: " << current->backdropPath << endl;
-			cout << "Recommendations: " << current->recommendations << endl;
+			cout << "Movie ID: " << current->movieData.movieID << endl;
+			cout << "Title: " << current->movieData.title << endl;
+			cout << "Genre: " << current->movieData.genre << endl;
+			cout << "Original Language: " << current->movieData.originalLanguage << endl;
+			cout << "Overview: " << current->movieData.overview << endl;
+			cout << "Popularity: " << current->movieData.popularity << endl;
+			cout << "Production Companies: " << current->movieData.productionCompanies << endl;
+			cout << "Release Date: " << current->movieData.releaseDate << endl;
+			cout << "Budget: " << current->movieData.budget << endl;
+			cout << "Revenue: " << current->movieData.revenue << endl;
+			cout << "Runtime: " << current->movieData.runtime << endl;
+			cout << "Status: " << current->movieData.status << endl;
+			cout << "Tagline: " << current->movieData.tagline << endl;
+			cout << "Voter Average: " << current->movieData.voterAverage << endl;
+			cout << "Voter Count: " << current->movieData.voterCount << endl;
+			cout << "Credits: " << current->movieData.credits << endl;
+			cout << "Keywords: " << current->movieData.keywords << endl;
+			cout << "Poster Path: " << current->movieData.posterPath << endl;
+			cout << "Backdrop Path: " << current->movieData.backdropPath << endl;
+			cout << "Recommendations: " << current->movieData.recommendations << endl;
 			return; // Exit after finding the movie
-		} else if (movieID < current->movieID) {
+		} else if (movieID < current->movieData.movieID) {
 			current = current->left; // Move left
 		} else {
 			current = current->right; // Move right

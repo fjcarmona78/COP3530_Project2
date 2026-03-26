@@ -27,7 +27,7 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(glfw)
 
-include_directories(src rc/imgui src/imgui/backends)
+include_directories(src src/imgui src/imgui/backends)
 
 add_executable(Main
         src/main.cpp

@@ -3,27 +3,27 @@
 
 #include "Movie.h"
 #include <vector>
+struct SplayNode {
+    Movie data;
+    SplayNode* left;
+    SplayNode* right;
+
+    SplayNode(const Movie& movie) : data(movie), left(nullptr), right(nullptr) {}
+};
+
 
 class SplayTree {
 private:
-    struct Node {
-        Movie data;
-        Node* left;
-        Node* right;
+    SplayNode* root;
 
-        Node(const Movie& movie) : data(movie), left(nullptr), right(nullptr) {}
-    };
+    SplayNode* rightRotate(SplayNode* x);
+    SplayNode* leftRotate(SplayNode* x);
+    SplayNode* splay(SplayNode* currentRoot, int rank);
+    SplayNode* insert(SplayNode* currentRoot, const Movie& movie);
 
-    Node* root;
-
-    Node* rightRotate(Node* x);
-    Node* leftRotate(Node* x);
-    Node* splay(Node* currentRoot, int rank);
-    Node* insert(Node* currentRoot, const Movie& movie);
-
-    void destroyTree(Node* node);
-    void inorder(Node* node) const;
-    void collectMovies(Node* node, std::vector<Movie>& movies) const;
+    void destroyTree(SplayNode* SplayNode);
+    void inorder(SplayNode* SplayNode) const;
+    void collectMovies(SplayNode* SplayNode, std::vector<Movie>& movies) const;
 
 public:
     SplayTree();

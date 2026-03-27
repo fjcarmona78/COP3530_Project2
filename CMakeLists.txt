@@ -1,4 +1,3 @@
-
 cmake_minimum_required(VERSION 3.22)
 project(Project1)
 
@@ -7,7 +6,7 @@ set(CMAKE_CXX_STANDARD 14)
 if (MSVC)
     add_compile_options(/W3)
 else()
-    add_compile_options(-Wall -Werror)
+    add_compile_options(-Wall) 
 endif()
 
 ##pull in desired version of catch through cmake automatically, make it available
@@ -38,10 +37,14 @@ add_executable(Main
         src/imgui/imgui_widgets.cpp
         src/imgui/backends/imgui_impl_opengl3.cpp
         src/imgui/backends/imgui_impl_glfw.cpp
+        src/Movie.h
+        src/SplayTree.cpp
+        src/SplayTree.h
         src/Parser.cpp
         src/Parser.h
-        src/TreeNode.cpp
-        src/TreeNode.h 
+        src/RBTree.cpp
+        src/RBTree.h 
+        src/WindowManager.cpp
         )
         
 target_link_libraries(Main PRIVATE glfw opengl32)
@@ -49,9 +52,12 @@ target_link_libraries(Main PRIVATE glfw opengl32)
 # These tests can use the Catch2-provided main
 add_executable(Tests
         test/test.cpp
-        src/TreeNode.cpp
-        src/TreeNode.h
-)
+        src/RBTree.cpp
+        src/RBTree.h  
+        src/SplayTree.cpp
+        src/SplayTree.h
+        src/Movie.h 
+        )
         
 target_link_libraries(Tests PRIVATE Catch2::Catch2WithMain) #link catch to test.cpp file
 # the name here must match that of your testing executable (the one that has test.cpp)

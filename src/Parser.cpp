@@ -109,8 +109,8 @@ double Parser::toDouble(const string& text) {
     }
 }
 
-vector<TreeNode> Parser::loadMovies(const string& filename) {
-    vector<TreeNode> movies;
+vector<Movie> Parser::loadMovies(const string& filename) {
+    vector<Movie> movies;
     ifstream file(filename);
 
     if (!file.is_open()) {
@@ -155,7 +155,7 @@ vector<TreeNode> Parser::loadMovies(const string& filename) {
             continue;
         }
 
-        TreeNode movie;
+        Movie movie;
 
         movie.movieID = (idIndex >= 0) ? toInt(row[idIndex]) : 0;
         movie.title = (titleIndex >= 0) ? cleanText(row[titleIndex]) : "";
@@ -186,8 +186,8 @@ vector<TreeNode> Parser::loadMovies(const string& filename) {
     return movies;
 }
 
-void Parser::assignPopularityRanks(vector<TreeNode>& movies) {
-    sort(movies.begin(), movies.end(), [](const TreeNode& a, const TreeNode& b) {
+void Parser::assignPopularityRanks(vector<Movie>& movies) {
+    sort(movies.begin(), movies.end(), [](const Movie& a, const Movie& b) {
         return a.popularity > b.popularity;
     });
 

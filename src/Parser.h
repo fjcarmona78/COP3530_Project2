@@ -3,7 +3,8 @@
 
 #include <string>
 #include <vector>
-#include "TreeNode.h"
+#include "RBTree.h"
+#include "Movie.h"
 
 class Parser {
 private:
@@ -15,8 +16,8 @@ private:
     std::string cleanText(const std::string& text);
 
 public:
-    std::vector<TreeNode> loadMovies(const std::string& filename);
-    void assignPopularityRanks(std::vector<TreeNode>& movies);
+    std::vector<Movie> loadMovies(const std::string& filename);
+    void assignPopularityRanks(std::vector<Movie>& movies);
 };
 
 #endif

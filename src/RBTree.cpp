@@ -237,7 +237,7 @@ vector <Movie*> redBlackTree::levelOrderTraversal() {
 	queue<TreeNode*> q;
 	int count = 0; // Counter to keep track of the number of nodes added to the result vector
 	q.push(root);
-	while (!q.empty() || count < 1000) {
+	while (!q.empty() && count < 1000) {
 		TreeNode* current = q.front();
 		q.pop();
 		result.push_back(&(current->movieData)); // Add the current node to the result vector

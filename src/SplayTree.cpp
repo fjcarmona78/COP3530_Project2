@@ -5,269 +5,308 @@
 
 using namespace std;
 
-SplayTree::SplayTree() {
-    root = nullptr;
+SplayTree::SplayTree(SortType sortType) {
+	root = nullptr;
+	sortBy = sortType;
 }
 
 SplayTree::~SplayTree() {
-    destroyTree(root);
-    root = nullptr;
+	destroyTree(root);
+	root = nullptr;
 }
 
 void SplayTree::destroyTree(SplayNode* node) {
-    if (node == nullptr) {
-        return;
-    }
+	if (node == nullptr) {
+		return;
+	}
 
-    vector<SplayNode*> stack;
-    stack.push_back(node);
+	vector<SplayNode*> stack;
+	stack.push_back(node);
 
-    while (!stack.empty()) {
-        SplayNode* current = stack.back();
-        stack.pop_back();
+	while (!stack.empty()) {
+		SplayNode* current = stack.back();
+		stack.pop_back();
 
-        if (current->left != nullptr) {
-            stack.push_back(current->left);
-        }
-        if (current->right != nullptr) {
-            stack.push_back(current->right);
-        }
+		if (current->left != nullptr) {
+			stack.push_back(current->left);
+		}
+		if (current->right != nullptr) {
+			stack.push_back(current->right);
+		}
 
-        delete current;
-    }
+		delete current;
+	}
 }
 
 SplayNode* SplayTree::rightRotate(SplayNode* x) {
-    SplayNode* y = x->left;
-    x->left = y->right;
-    y->right = x;
-    return y;
+	SplayNode* y = x->left;
+	x->left = y->right;
+	y->right = x;
+	return y;
 }
 
 SplayNode* SplayTree::leftRotate(SplayNode* x) {
-    SplayNode* y = x->right;
-    x->right = y->left;
-    y->left = x;
-    return y;
+	SplayNode* y = x->right;
+	x->right = y->left;
+	y->left = x;
+	return y;
 }
 
-SplayNode* SplayTree::splay(SplayNode* currentRoot, int rank) {
-    if (currentRoot == nullptr) {
-        return nullptr;
-    }
+SplayNode* SplayTree::splay(SplayNode* currentRoot, long key) {
+	if (currentRoot == nullptr) {
+		return nullptr;
+	}
 
-    Movie tempMovie;
-    SplayNode header(tempMovie);
+	SplayNode header = SplayNode(Movie());
 
-    SplayNode* leftTreeMax = &header;
-    SplayNode* rightTreeMin = &header;
+	SplayNode* leftTreeMax = &header;
+	SplayNode* rightTreeMin = &header;
 
-    while (true) {
-        if (rank < currentRoot->data.popularityRank) {
-            if (currentRoot->left == nullptr) {
-                break;
-            }
+	while (true) {
+		long currentKey = getKey(currentRoot->movieData);
 
-            if (rank < currentRoot->left->data.popularityRank) {
-                currentRoot = rightRotate(currentRoot);
-                if (currentRoot->left == nullptr) {
-                    break;
-                }
-            }
+		if (key < currentKey) {
+			if (currentRoot->left == nullptr) {
+				break;
+			}
 
-            rightTreeMin->left = currentRoot;
-            rightTreeMin = currentRoot;
-            currentRoot = currentRoot->left;
-        }
-        else if (rank > currentRoot->data.popularityRank) {
-            if (currentRoot->right == nullptr) {
-                break;
-            }
+			if (key < getKey(currentRoot->left->movieData)) {
+				currentRoot = rightRotate(currentRoot);
+				if (currentRoot->left == nullptr) {
+					break;
+				}
+			}
 
-            if (rank > currentRoot->right->data.popularityRank) {
-                currentRoot = leftRotate(currentRoot);
-                if (currentRoot->right == nullptr) {
-                    break;
-                }
-            }
+			rightTreeMin->left = currentRoot;
+			rightTreeMin = currentRoot;
+			currentRoot = currentRoot->left;
+		}
+		else if (key > currentKey) {
+			if (currentRoot->right == nullptr) {
+				break;
+			}
 
-            leftTreeMax->right = currentRoot;
-            leftTreeMax = currentRoot;
-            currentRoot = currentRoot->right;
-        }
-        else {
-            break;
-        }
-    }
+			if (key > getKey(currentRoot->right->movieData)) {
+				currentRoot = leftRotate(currentRoot);
+				if (currentRoot->right == nullptr) {
+					break;
+				}
+			}
 
-    leftTreeMax->right = currentRoot->left;
-    rightTreeMin->left = currentRoot->right;
-    currentRoot->left = header.right;
-    currentRoot->right = header.left;
+			leftTreeMax->right = currentRoot;
+			leftTreeMax = currentRoot;
+			currentRoot = currentRoot->right;
+		}
+		else {
+			break;
+		}
+	}
 
-    return currentRoot;
+	leftTreeMax->right = currentRoot->left;
+	rightTreeMin->left = currentRoot->right;
+	currentRoot->left = header.right;
+	currentRoot->right = header.left;
+
+	return currentRoot;
 }
 
 SplayNode* SplayTree::insert(SplayNode* currentRoot, const Movie& movie) {
-    if (currentRoot == nullptr) {
-        return new SplayNode(movie);
-    }
+	if (currentRoot == nullptr) {
+		return new SplayNode(movie);
+	}
 
-    currentRoot = splay(currentRoot, movie.popularityRank);
+	long movieKey = getKey(movie);
+	currentRoot = splay(currentRoot, movieKey);
 
-    if (movie.popularityRank < currentRoot->data.popularityRank) {
-        SplayNode* newNode = new SplayNode(movie);
-        newNode->left = currentRoot->left;
-        newNode->right = currentRoot;
-        currentRoot->left = nullptr;
-        return newNode;
-    }
-    else if (movie.popularityRank > currentRoot->data.popularityRank) {
-        SplayNode* newNode = new SplayNode(movie);
-        newNode->right = currentRoot->right;
-        newNode->left = currentRoot;
-        currentRoot->right = nullptr;
-        return newNode;
-    }
+	long currentKey = getKey(currentRoot->movieData);
 
-    return currentRoot;
+	if (movieKey < currentKey) {
+		SplayNode* newNode = new SplayNode(movie);
+		newNode->left = currentRoot->left;
+		newNode->right = currentRoot;
+		currentRoot->left = nullptr;
+		return newNode;
+	}
+	else if (movieKey > currentKey) {
+		SplayNode* newNode = new SplayNode(movie);
+		newNode->right = currentRoot->right;
+		newNode->left = currentRoot;
+		currentRoot->right = nullptr;
+		return newNode;
+	}
+
+	return currentRoot;
 }
 
 bool SplayTree::insert(const Movie& movie) {
-    root = insert(root, movie);
-
+	root = insert(root, movie);
     return root;
 }
 
-Movie* SplayTree::search(int rank) {
-    return searchByRank(rank);
+SplayNode* SplayTree::searchRankHelper(SplayNode* node, int rank) {
+	if (node == nullptr) {
+		return nullptr;
+	}
+
+	// If this splay tree is organized by rank, use real splay search
+	if (sortBy == BY_RANK) {
+		root = splay(root, rank);
+
+		if (root != nullptr && root->movieData.popularityRank == rank) {
+			return root;
+		}
+
+		return nullptr;
+	}
+
+	// Otherwise, do traversal search
+	vector<SplayNode*> stack;
+	stack.push_back(node);
+
+	while (!stack.empty()) {
+		SplayNode* current = stack.back();
+		stack.pop_back();
+
+		if (current->movieData.popularityRank == rank) {
+			return current;
+		}
+
+		if (current->right != nullptr) {
+			stack.push_back(current->right);
+		}
+		if (current->left != nullptr) {
+			stack.push_back(current->left);
+		}
+	}
+
+	return nullptr;
 }
 
 Movie* SplayTree::searchByRank(int rank) {
-    if (root == nullptr) {
-        return nullptr;
-    }
+	SplayNode* result = searchRankHelper(root, rank);
+	if (result == nullptr) {
+		return nullptr;
+	}
+	return &(result->movieData);
+}
 
-    root = splay(root, rank);
+double SplayTree::getMostPopularMovie() {
+	Movie* movie = searchByRank(1);
+	if (movie == nullptr) {
+		return 0.0;
+	}
+	return movie->popularity;
+}
 
-    if (root->data.popularityRank == rank) {
-        return &(root->data);
-    }
+SplayNode* SplayTree::searchMovieIDHelper(SplayNode* node, long movieID) {
+	if (node == nullptr) {
+		return nullptr;
+	}
 
-    return nullptr;
+	// If this splay tree is organized by movie ID, use real splay search
+	if (sortBy == BY_MOVIEID) {
+		root = splay(root, movieID);
+
+		if (root != nullptr && root->movieData.movieID == movieID) {
+			return root;
+		}
+
+		return nullptr;
+	}
+
+	// Otherwise, do traversal search
+	vector<SplayNode*> stack;
+	stack.push_back(node);
+
+	while (!stack.empty()) {
+		SplayNode* current = stack.back();
+		stack.pop_back();
+
+		if (current->movieData.movieID == movieID) {
+			return current;
+		}
+
+		if (current->right != nullptr) {
+			stack.push_back(current->right);
+		}
+		if (current->left != nullptr) {
+			stack.push_back(current->left);
+		}
+	}
+
+	return nullptr;
 }
 
 Movie* SplayTree::searchByMovieID(int64_t movieID) {
-    if (root == nullptr) {
-        return nullptr;
-    }
+	SplayNode* result = searchMovieIDHelper(root, movieID);
 
-    vector<SplayNode*> stack;
-    stack.push_back(root);
-
-    while (!stack.empty()) {
-        SplayNode* current = stack.back();
-        stack.pop_back();
-
-        if (current->data.movieID == movieID) {
-            return &(current->data);
-        }
-
-        if (current->right != nullptr) {
-            stack.push_back(current->right);
-        }
-
-        if (current->left != nullptr) {
-            stack.push_back(current->left);
-        }
-    }
-
-    return nullptr;
-}
-
-Movie* SplayTree::searchByRevenue(long long revenue) {
-    if (root == nullptr) {
-        return nullptr;
-    }
-
-    vector<SplayNode*> stack;
-    stack.push_back(root);
-
-    while (!stack.empty()) {
-        SplayNode* current = stack.back();
-        stack.pop_back();
-
-        if (current->data.revenue == revenue) {
-            return &(current->data);
-        }
-
-        if (current->right != nullptr) {
-            stack.push_back(current->right);
-        }
-
-        if (current->left != nullptr) {
-            stack.push_back(current->left);
-        }
-    }
-
-    return nullptr;
-}
-
-void SplayTree::inorder(SplayNode* node) const {
-    if (node == nullptr) {
-        return;
-    }
-
-    inorder(node->left);
-    cout << "Rank: " << node->data.popularityRank
-         << " | Title: " << node->data.title
-         << " | ID: " << node->data.movieID
-         << " | Revenue: " << node->data.revenue
-         << endl;
-    inorder(node->right);
-}
-
-void SplayTree::printInOrder() const {
-    inorder(root);
-}
-
-void SplayTree::collectMovies(SplayNode* node, vector<Movie>& movies) const {
-    if (node == nullptr) {
-        return;
-    }
-
-    collectMovies(node->left, movies);
-    movies.push_back(node->data);
-    collectMovies(node->right, movies);
-}
-
-vector<Movie> SplayTree::getAllMovies() const {
-    vector<Movie> movies;
-    collectMovies(root, movies);
-    return movies;
-}
-
-std::vector<Movie> SplayTree::levelOrderTraversal() {
- 	// Logic to perform level order traversal of the tree
-	// Add pointers to the first 1000 nodes in the order they are visited to the result vector
-	vector<Movie> result;
-	if (root == nullptr) {
-		return result; // Return empty vector if tree is empty
+	if (result == nullptr) {
+		cout << "Movie with ID " << movieID << " not found." << endl;
+		return nullptr;
 	}
+
+    return &(result->movieData);
+}
+
+long SplayTree::getHighestRevenueMovie() {
+	if (root == nullptr) {
+		return 0;
+	}
+
+	vector<SplayNode*> stack;
+	stack.push_back(root);
+
+	long bestRevenue = root->movieData.revenue;
+
+	while (!stack.empty()) {
+		SplayNode* current = stack.back();
+		stack.pop_back();
+
+		if (current->movieData.revenue > bestRevenue) {
+			bestRevenue = current->movieData.revenue;
+		}
+
+		if (current->right != nullptr) {
+			stack.push_back(current->right);
+		}
+		if (current->left != nullptr) {
+			stack.push_back(current->left);
+		}
+	}
+
+	return bestRevenue;
+}
+
+long SplayTree::getKey(const Movie& movie) {
+	if (sortBy == BY_MOVIEID) {
+		return movie.movieID;
+	}
+	return movie.popularityRank;
+}
+
+vector<Movie*> SplayTree::levelOrderTraversal() {
+	vector<Movie*> result;
+
+	if (root == nullptr) {
+		return result;
+	}
+
 	queue<SplayNode*> q;
-	int count = 0; // Counter to keep track of the number of nodes added to the result vector
 	q.push(root);
-	while (!q.empty() || count < 1000) {
+
+	while (!q.empty()) {
 		SplayNode* current = q.front();
 		q.pop();
-		result.push_back(current->data); // Add the current node to the result vector
-		count++;
+
+		result.push_back(&(current->movieData));
+
 		if (current->left != nullptr) {
-			q.push(current->left); // Add left child to the queue
+			q.push(current->left);
 		}
 		if (current->right != nullptr) {
-			q.push(current->right); // Add right child to the queue
+			q.push(current->right);
 		}
 	}
-	return result; // Return the vector containing pointers to the first 1000 nodes in level order
+
+	return result;
 }

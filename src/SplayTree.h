@@ -8,44 +8,42 @@
 #include <queue>
 
 struct SplayNode {
-    Movie data;
-    SplayNode* left;
-    SplayNode* right;
+    Movie movieData;
+    SplayNode* left = nullptr;
+    SplayNode* right = nullptr;
 
-    SplayNode(const Movie& movie) : data(movie), left(nullptr), right(nullptr) {}
+    SplayNode(const Movie& movie) : movieData(movie), left(nullptr), right(nullptr) {}
 };
-
 
 class SplayTree : public BSTMovie {
 private:
-    SplayNode* root;
+	SplayNode* root;
+	SortType sortBy;
 
-    SplayNode* rightRotate(SplayNode* x);
-    SplayNode* leftRotate(SplayNode* x);
-    SplayNode* splay(SplayNode* currentRoot, int rank);
-    SplayNode* insert(SplayNode* currentRoot, const Movie& movie);
+	SplayNode* rightRotate(SplayNode* x);
+	SplayNode* leftRotate(SplayNode* x);
+	SplayNode* splay(SplayNode* currentRoot, long key);
+	SplayNode* insert(SplayNode* currentRoot, const Movie& movie);
+	SplayNode* searchMovieIDHelper(SplayNode* node, long movieID);
 
-    void destroyTree(SplayNode* SplayNode);
-    void inorder(SplayNode* SplayNode) const;
-    void collectMovies(SplayNode* SplayNode, std::vector<Movie>& movies) const;
+	void destroyTree(SplayNode* node);
+	SplayNode* searchRankHelper(SplayNode* node, int rank);
+	long getKey(const Movie& movie);
 
 public:
-    SplayTree();
-    ~SplayTree();
+	SplayTree(SortType sortType = BY_MOVIEID);
+	~SplayTree();
 
-    bool insert(const Movie& movie) override;
+	bool insert(const Movie& node) override;
 
-    Movie* search(int rank);
-    Movie* searchByRank(int rank);
-    Movie* searchByMovieID(int64_t movieID) override;
-    Movie* searchByRevenue(long long revenue);
-
-    bool isEmpty() override {
-        return !root;
-    };
-    void printInOrder() const;
-    std::vector<Movie> getAllMovies() const;
-    std::vector<Movie> levelOrderTraversal() override;
+	Movie* searchByRank(int rank) override;
+	vector<Movie*> levelOrderTraversal() override;
+	double getMostPopularMovie() override;
+	long getHighestRevenueMovie() override;
+	Movie* searchByMovieID(int64_t movieID) override;
+	bool isEmpty() override {
+		return !root;
+	}
 };
 
 #endif

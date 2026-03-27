@@ -24,22 +24,23 @@ struct TreeNode {
 
 class redBlackTree : public BSTMovie {
 public:
-	enum SortType { BY_MOVIEID, BY_POPULARITY, BY_REVENUE };
 	redBlackTree(SortType sortType = BY_MOVIEID);
 
 	// Public member functions for the red-black tree creation and manipulation
 	bool insert(const Movie& movie) override;
-	void rotateLeft(TreeNode* node);
-	void rotateRight(TreeNode* node);
-	void balanceInsert(TreeNode* node);
-	double getMostPopularMovie();
-	long getHighestRevenueMovie();
+	double getMostPopularMovie() override;
+	long getHighestRevenueMovie() override;
 	Movie* searchByMovieID(int64_t movieID) override;
-	std::vector<Movie> levelOrderTraversal() override;
+	std::vector<Movie *> levelOrderTraversal() override;
+	Movie* searchByRank(int rank) override;
 	bool isEmpty() override {
 		return !root;
 	}
 private:
 	TreeNode* root;
 	SortType sortBy;
+	Movie* searchRankHelper(TreeNode *node, int rank);
+	void rotateLeft(TreeNode* node);
+	void rotateRight(TreeNode* node);
+	void balanceInsert(TreeNode* node);
 };

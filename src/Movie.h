@@ -51,4 +51,6 @@ struct Movie {
     }
 };
 
+enum SortType { BY_MOVIEID, BY_POPULARITY, BY_REVENUE, BY_RANK };
+
 #endif

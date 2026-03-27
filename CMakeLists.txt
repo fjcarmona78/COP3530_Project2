@@ -1,3 +1,4 @@
+
 cmake_minimum_required(VERSION 3.22)
 project(Project1)
 
@@ -37,9 +38,6 @@ add_executable(Main
         src/imgui/imgui_widgets.cpp
         src/imgui/backends/imgui_impl_opengl3.cpp
         src/imgui/backends/imgui_impl_glfw.cpp
-        src/Movie.h
-        src/SplayTree.cpp
-        src/SplayTree.h
         src/Parser.cpp
         src/Parser.h
         src/TreeNode.cpp
@@ -52,11 +50,8 @@ target_link_libraries(Main PRIVATE glfw opengl32)
 add_executable(Tests
         test/test.cpp
         src/TreeNode.cpp
-        src/TreeNode.h  
-        src/SplayTree.cpp
-        src/SplayTree.h
-        src/Movie.h 
-        )
+        src/TreeNode.h
+)
         
 target_link_libraries(Tests PRIVATE Catch2::Catch2WithMain) #link catch to test.cpp file
 # the name here must match that of your testing executable (the one that has test.cpp)

@@ -3,23 +3,20 @@
 
 #include <string>
 #include <vector>
-#include "Movie.h"
-#include "SplayTree.h"
+#include "TreeNode.h"
 
 class Parser {
 private:
     std::vector<std::string> splitCSVLine(const std::string& line);
     int findColumnIndex(const std::vector<std::string>& headers, const std::string& name);
     int toInt(const std::string& text);
-    long long toLongLong(const std::string& text);
+    long toLong(const std::string& text);
     double toDouble(const std::string& text);
-
-    void insertBalanced(std::vector<Movie>& movies, int left, int right, SplayTree& tree);
+    std::string cleanText(const std::string& text);
 
 public:
-    std::vector<Movie> loadMovies(const std::string& filename);
-    void assignPopularityRanks(std::vector<Movie>& movies);
-    void loadIntoSplayTree(const std::string& filename, SplayTree& tree);
+    std::vector<TreeNode> loadMovies(const std::string& filename);
+    void assignPopularityRanks(std::vector<TreeNode>& movies);
 };
 
 #endif

@@ -13,6 +13,7 @@ struct TreeNode {
 	string originalLanguage;  // Original language of the movie
 	string overview;          // Overview or summary of the movie
 	double popularity;        // Popularity score of the movie
+	int popularityRank;       // Popularity by rank (top 1, 2, etc...)
 	string productionCompanies; // Production companies involved in the movie
 	string releaseDate;       // Release date of the movie
 	long budget;             // Budget of the movie
@@ -32,7 +33,7 @@ struct TreeNode {
 	TreeNode* right;        // Pointer to the right child node
 	TreeNode* parent;       // Pointer to the parent node
 	// Constructor to initialize a TreeNode with default values
-	TreeNode() : isRed(true), left(nullptr), right(nullptr) {}
+	TreeNode() : popularityRank(0), isRed(true), left(nullptr), right(nullptr), parent(nullptr) {}
 };
 
 
@@ -40,6 +41,7 @@ class redBlackTree {
 public:
 	enum SortType { BY_MOVIEID, BY_POPULARITY, BY_REVENUE };
 	redBlackTree(SortType sortType = BY_MOVIEID);
+
 
 	// Public member functions for the red-black tree creation and manipulation
 	void insert(TreeNode* node);
@@ -49,8 +51,49 @@ public:
 	double getMostPopularMovie();
 	long getHighestRevenueMovie();
 	void searchByMovieID(long movieID);
+	TreeNode* searchByRank(int rank);
 	vector <TreeNode*> levelOrderTraversal();
 private:
 	TreeNode* root;
 	SortType sortBy;
+	TreeNode* searchRankHelper(TreeNode* node, int rank);
+};
+
+class SplayTree {
+public:
+	enum SortType { BY_RANK, BY_MOVIEID };
+
+private:
+	struct SplayNode {
+		TreeNode data;
+		SplayNode* left;
+		SplayNode* right;
+
+		SplayNode(const TreeNode& movie);
+	};
+
+	SplayNode* root;
+	SortType sortBy;
+
+	SplayNode* rightRotate(SplayNode* x);
+	SplayNode* leftRotate(SplayNode* x);
+	SplayNode* splay(SplayNode* currentRoot, long key);
+	SplayNode* insert(SplayNode* currentRoot, const TreeNode& movie);
+	SplayNode* searchMovieIDHelper(SplayNode* node, long movieID);
+
+	void destroyTree(SplayNode* node);
+	SplayNode* searchRankHelper(SplayNode* node, int rank);
+	long getKey(const TreeNode& movie);
+
+public:
+	SplayTree(SortType sortType = BY_RANK);
+	~SplayTree();
+
+	void insert(TreeNode* node);
+
+	TreeNode* searchByRank(int rank);
+	vector<TreeNode*> levelOrderTraversal();
+	double getMostPopularMovie();
+	long getHighestRevenueMovie();
+	void searchByMovieID(long movieID);
 };

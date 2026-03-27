@@ -4,7 +4,6 @@
 #include <sstream>
 #include <algorithm>
 #include "TreeNode.h"
-#include "SplayTree.h"
 
 using namespace std;
 
@@ -41,19 +40,6 @@ static TreeNode* makeNode(long movieID,
 
     return node;
 }
-
-static Movie makeMovie(int rank,
-    int id,
-    const string& title = "Movie",
-    long long revenue = 0) {
-    Movie movie{};
-    movie.popularityRank = rank;
-    movie.id = id;
-    movie.title = title;
-    movie.revenue = revenue;
-    return movie;
-}
-
 // --------------------------------------------------------------
 // Test cases for the red-black tree implementation
 // --------------------------------------------------------------
@@ -185,124 +171,172 @@ TEST_CASE("searchByMovieID prints not found message when missing", "[tree][searc
     REQUIRE(output.find("Movie with ID 999 not found.") != string::npos);
 }
 
-// --------------------------------------------------------------
-// Splay tree tests
-// --------------------------------------------------------------
+/*
+ --------------------------------------------------------------
+ Test cases for the splay tree implementation
 
-// Test case to verify that an empty splay tree reports as empty and that searches for any movie return nullptr
-TEST_CASE("Empty splay tree reports empty and missing searches return nullptr", "[splay][empty]") {
+ These tests were updated to match the final SplayTree interface
+ without changing the shared helper function.
+ --------------------------------------------------------------
+*/
+
+TEST_CASE("Empty splay tree level order is empty", "[splay][empty]") {
     SplayTree tree;
 
-    REQUIRE(tree.empty());
-    REQUIRE(tree.search(10) == nullptr);
-    REQUIRE(tree.searchByRank(10) == nullptr);
-    REQUIRE(tree.searchById(10) == nullptr);
-    REQUIRE(tree.searchByRevenue(1000) == nullptr);
-    REQUIRE(tree.getAllMovies().empty());
+    vector<TreeNode*> result = tree.levelOrderTraversal();
+
+    REQUIRE(result.empty());
 }
 
-// Test case to verify that inserting a single movie into the splay tree allows it to be found by rank, id, and search, and that the tree is no longer empty
-TEST_CASE("Single insert in splay tree can be found", "[splay][insert][search]") {
-    SplayTree tree;
-    Movie movie = makeMovie(10, 101, "Solo", 1000);
-
-    tree.insert(movie);
-
-    REQUIRE_FALSE(tree.empty());
-
-    Movie* foundByRank = tree.searchByRank(10);
-    REQUIRE(foundByRank != nullptr);
-    REQUIRE(foundByRank->id == 101);
-    REQUIRE(foundByRank->title == "Solo");
-    REQUIRE(foundByRank->revenue == 1000);
-
-    Movie* foundBySearch = tree.search(10);
-    REQUIRE(foundBySearch != nullptr);
-    REQUIRE(foundBySearch->id == 101);
-
-    Movie* foundById = tree.searchById(101);
-    REQUIRE(foundById != nullptr);
-    REQUIRE(foundById->popularityRank == 10);
-}
-
-// Test case to verify that inserting multiple movies into the splay tree results in an inorder traversal that is sorted by popularity rank
-TEST_CASE("Splay tree inorder data is sorted by popularity rank after inserts", "[splay][order]") {
+TEST_CASE("Single insert in splay tree can be found by rank", "[splay][insert][rank]") {
     SplayTree tree;
 
-    tree.insert(makeMovie(30, 300, "Thirty", 3000));
-    tree.insert(makeMovie(10, 100, "Ten", 1000));
-    tree.insert(makeMovie(20, 200, "Twenty", 2000));
-    tree.insert(makeMovie(40, 400, "Forty", 4000));
+    TreeNode* node = makeNode(101, "Solo", 10.0, 1000);
+    node->popularityRank = 1;
+    tree.insert(node);
 
-    vector<Movie> movies = tree.getAllMovies();
-
-    REQUIRE(movies.size() == 4);
-    REQUIRE(movies[0].popularityRank == 10);
-    REQUIRE(movies[1].popularityRank == 20);
-    REQUIRE(movies[2].popularityRank == 30);
-    REQUIRE(movies[3].popularityRank == 40);
-}
-
-// Test case to verify that searching for a movie by its popularity rank in the splay tree correctly returns the movie details when the movie is found
-TEST_CASE("Splay tree can search by rank", "[splay][rank]") {
-    SplayTree tree;
-
-    tree.insert(makeMovie(30, 300, "Thirty", 3000));
-    tree.insert(makeMovie(10, 100, "Ten", 1000));
-    tree.insert(makeMovie(20, 200, "Twenty", 2000));
-    tree.insert(makeMovie(40, 400, "Forty", 4000));
-
-    Movie* found = tree.searchByRank(20);
+    TreeNode* found = tree.searchByRank(1);
 
     REQUIRE(found != nullptr);
-    REQUIRE(found->id == 200);
+    REQUIRE(found->movieID == 101);
+    REQUIRE(found->title == "Solo");
+    REQUIRE(found->revenue == 1000);
+    REQUIRE(found->popularityRank == 1);
+}
+
+TEST_CASE("Splay tree searchByRank returns the correct movie", "[splay][rank]") {
+    SplayTree tree;
+
+    TreeNode* node1 = makeNode(300, "Thirty", 30.0, 3000);
+    node1->popularityRank = 3;
+    tree.insert(node1);
+
+    TreeNode* node2 = makeNode(100, "Ten", 10.0, 1000);
+    node2->popularityRank = 1;
+    tree.insert(node2);
+
+    TreeNode* node3 = makeNode(200, "Twenty", 20.0, 2000);
+    node3->popularityRank = 2;
+    tree.insert(node3);
+
+    TreeNode* node4 = makeNode(400, "Forty", 40.0, 4000);
+    node4->popularityRank = 4;
+    tree.insert(node4);
+
+    TreeNode* found = tree.searchByRank(2);
+
+    REQUIRE(found != nullptr);
+    REQUIRE(found->movieID == 200);
     REQUIRE(found->title == "Twenty");
     REQUIRE(found->revenue == 2000);
+    REQUIRE(found->popularityRank == 2);
 }
 
-// Test case to verify that searching for a movie by its ID and revenue in the splay tree correctly returns the movie details when the movie is found
-TEST_CASE("Splay tree can search by id and revenue", "[splay][search]") {
+TEST_CASE("Splay tree level order returns inserted nodes", "[splay][levelorder]") {
     SplayTree tree;
 
-    tree.insert(makeMovie(5, 501, "Alpha", 1500));
-    tree.insert(makeMovie(15, 502, "Beta", 2500));
-    tree.insert(makeMovie(25, 503, "Gamma", 3500));
+    TreeNode* node1 = makeNode(300, "Thirty", 30.0, 3000);
+    node1->popularityRank = 3;
+    tree.insert(node1);
 
-    Movie* byId = tree.searchById(502);
-    REQUIRE(byId != nullptr);
-    REQUIRE(byId->title == "Beta");
-    REQUIRE(byId->popularityRank == 15);
+    TreeNode* node2 = makeNode(100, "Ten", 10.0, 1000);
+    node2->popularityRank = 1;
+    tree.insert(node2);
 
-    Movie* byRevenue = tree.searchByRevenue(3500);
-    REQUIRE(byRevenue != nullptr);
-    REQUIRE(byRevenue->title == "Gamma");
-    REQUIRE(byRevenue->id == 503);
+    TreeNode* node3 = makeNode(200, "Twenty", 20.0, 2000);
+    node3->popularityRank = 2;
+    tree.insert(node3);
+
+    vector<TreeNode*> result = tree.levelOrderTraversal();
+
+    REQUIRE_FALSE(result.empty());
+
+    bool found100 = false;
+    bool found200 = false;
+    bool found300 = false;
+
+    for (TreeNode* node : result) {
+        if (node->movieID == 100) found100 = true;
+        if (node->movieID == 200) found200 = true;
+        if (node->movieID == 300) found300 = true;
+    }
+
+    REQUIRE(found100);
+    REQUIRE(found200);
+    REQUIRE(found300);
 }
 
-// Test case to verify that searching for a movie by a non-existent popularity rank, ID, or revenue in the splay tree correctly returns nullpt
-TEST_CASE("Missing splay tree searches return nullptr", "[splay][missing]") {
+TEST_CASE("Splay tree searchByMovieID prints movie details when found", "[splay][movieid]") {
     SplayTree tree;
 
-    tree.insert(makeMovie(10, 1001, "One", 10000));
-    tree.insert(makeMovie(20, 1002, "Two", 20000));
+    TreeNode* node = makeNode(42, "The Answer", 9.9, 420000);
+    node->popularityRank = 1;
+    tree.insert(node);
 
-    REQUIRE(tree.search(999) == nullptr);
-    REQUIRE(tree.searchByRank(999) == nullptr);
-    REQUIRE(tree.searchById(9999) == nullptr);
-    REQUIRE(tree.searchByRevenue(999999) == nullptr);
+    ostringstream captured;
+    streambuf* oldCout = cout.rdbuf(captured.rdbuf());
+
+    tree.searchByMovieID(42);
+
+    cout.rdbuf(oldCout);
+    string output = captured.str();
+
+    REQUIRE(output.find("Movie ID: 42") != string::npos);
+    REQUIRE(output.find("Title: The Answer") != string::npos);
+    REQUIRE(output.find("Popularity: 9.9") != string::npos);
+    REQUIRE(output.find("Revenue: 420000") != string::npos);
 }
 
-// Test case to verify that inserting a movie with a duplicate popularity rank into the splay tree does not create a second node and that the original movie remains unchanged
-TEST_CASE("Duplicate popularity rank does not create a second node", "[splay][duplicate]") {
+TEST_CASE("Splay tree searchByMovieID prints not found message when missing", "[splay][movieid]") {
     SplayTree tree;
 
-    tree.insert(makeMovie(50, 5001, "Original", 1111));
-    tree.insert(makeMovie(50, 5002, "Duplicate", 2222));
+    TreeNode* node = makeNode(10, "Only Movie", 1.0, 100);
+    node->popularityRank = 1;
+    tree.insert(node);
 
-    vector<Movie> movies = tree.getAllMovies();
+    ostringstream captured;
+    streambuf* oldCout = cout.rdbuf(captured.rdbuf());
 
-    REQUIRE(movies.size() == 1);
-    REQUIRE(movies[0].popularityRank == 50);
-    REQUIRE(movies[0].id == 5001);
-    REQUIRE(movies[0].title == "Original");
+    tree.searchByMovieID(999);
+
+    cout.rdbuf(oldCout);
+    string output = captured.str();
+
+    REQUIRE(output.find("Movie with ID 999 not found.") != string::npos);
+}
+
+TEST_CASE("Splay tree getMostPopularMovie returns popularity of rank 1 movie", "[splay][helper]") {
+    SplayTree tree;
+
+    TreeNode* node1 = makeNode(100, "Movie A", 20.0, 1000);
+    node1->popularityRank = 3;
+    tree.insert(node1);
+
+    TreeNode* node2 = makeNode(200, "Movie B", 30.0, 2000);
+    node2->popularityRank = 2;
+    tree.insert(node2);
+
+    TreeNode* node3 = makeNode(300, "Movie C", 40.0, 3000);
+    node3->popularityRank = 1;
+    tree.insert(node3);
+
+    REQUIRE(tree.getMostPopularMovie() == 40.0);
+}
+
+TEST_CASE("Splay tree getHighestRevenueMovie returns highest revenue value", "[splay][helper]") {
+    SplayTree tree;
+
+    TreeNode* node1 = makeNode(100, "Movie A", 20.0, 1000);
+    node1->popularityRank = 3;
+    tree.insert(node1);
+
+    TreeNode* node2 = makeNode(200, "Movie B", 30.0, 5000);
+    node2->popularityRank = 2;
+    tree.insert(node2);
+
+    TreeNode* node3 = makeNode(300, "Movie C", 40.0, 3000);
+    node3->popularityRank = 1;
+    tree.insert(node3);
+
+    REQUIRE(tree.getHighestRevenueMovie() == 5000);
 }

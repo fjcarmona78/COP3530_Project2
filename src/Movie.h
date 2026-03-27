@@ -2,6 +2,8 @@
 #define MOVIE_H
 
 #include <string>
+#include <cstdint>
+
 using namespace std;
 
 struct Movie {

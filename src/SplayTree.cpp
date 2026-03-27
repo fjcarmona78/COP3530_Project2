@@ -14,10 +14,6 @@ SplayTree::~SplayTree() {
     root = nullptr;
 }
 
-bool SplayTree::empty() const {
-    return root == nullptr;
-}
-
 void SplayTree::destroyTree(SplayNode* node) {
     if (node == nullptr) {
         return;
@@ -137,8 +133,10 @@ SplayNode* SplayTree::insert(SplayNode* currentRoot, const Movie& movie) {
     return currentRoot;
 }
 
-void SplayTree::insert(const Movie& movie) {
+bool SplayTree::insert(const Movie& movie) {
     root = insert(root, movie);
+
+    return root;
 }
 
 Movie* SplayTree::search(int rank) {
@@ -159,7 +157,7 @@ Movie* SplayTree::searchByRank(int rank) {
     return nullptr;
 }
 
-Movie* SplayTree::searchById(int id) {
+Movie* SplayTree::searchByMovieID(int64_t movieID) {
     if (root == nullptr) {
         return nullptr;
     }
@@ -171,7 +169,7 @@ Movie* SplayTree::searchById(int id) {
         SplayNode* current = stack.back();
         stack.pop_back();
 
-        if (current->data.movieID == id) {
+        if (current->data.movieID == movieID) {
             return &(current->data);
         }
 
@@ -247,4 +245,29 @@ vector<Movie> SplayTree::getAllMovies() const {
     vector<Movie> movies;
     collectMovies(root, movies);
     return movies;
+}
+
+std::vector<Movie> SplayTree::levelOrderTraversal() {
+ 	// Logic to perform level order traversal of the tree
+	// Add pointers to the first 1000 nodes in the order they are visited to the result vector
+	vector<Movie> result;
+	if (root == nullptr) {
+		return result; // Return empty vector if tree is empty
+	}
+	queue<SplayNode*> q;
+	int count = 0; // Counter to keep track of the number of nodes added to the result vector
+	q.push(root);
+	while (!q.empty() || count < 1000) {
+		SplayNode* current = q.front();
+		q.pop();
+		result.push_back(current->data); // Add the current node to the result vector
+		count++;
+		if (current->left != nullptr) {
+			q.push(current->left); // Add left child to the queue
+		}
+		if (current->right != nullptr) {
+			q.push(current->right); // Add right child to the queue
+		}
+	}
+	return result; // Return the vector containing pointers to the first 1000 nodes in level order
 }

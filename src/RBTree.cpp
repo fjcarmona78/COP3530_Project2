@@ -7,11 +7,12 @@ using namespace std;
 
 redBlackTree::redBlackTree(SortType sortType) : root(nullptr), sortBy(sortType) {}
 
-void redBlackTree::insert(TreeNode* node) {
+bool redBlackTree::insert(const Movie& movie) {
 	// Insertion logic for the red-black tree
 	if (root == nullptr) {
-		root = node;
+		root = new TreeNode(movie);
 		root->isRed = false; // The root node must be black
+		return true;
 	} else {
 		// Insert the node into the tree based on the sorting criteria
 		TreeNode* parent = nullptr;
@@ -19,39 +20,41 @@ void redBlackTree::insert(TreeNode* node) {
 		while (current != nullptr) {
 			parent = current;
 			if (sortBy == BY_MOVIEID) {
-				if (node->movieData.movieID < current->movieData.movieID) {
+				if (movie.movieID < current->movieData.movieID) {
 					current = current->left;
 				} else {
 					current = current->right;
 				}
 			} else if (sortBy == BY_POPULARITY) {
-				if (node->movieData.popularity < current->movieData.popularity) {
+				if (movie.popularity < current->movieData.popularity) {
 					current = current->left;
-				} else {
+				} else  {
 					current = current->right;
 				}
 			} else { // BY_REVENUE
-				if (node->movieData.revenue < current->movieData.revenue) {
+				if (movie.revenue < current->movieData.revenue) {
 					current = current->left;
 				} else {
 					current = current->right;
 				}
 			}
 		}
+
+		TreeNode *node = new TreeNode(movie);
 		if (sortBy == BY_MOVIEID) {
-			if (node->movieData.movieID < parent->movieData.movieID) {
+			if (movie.movieID < parent->movieData.movieID) {
 				parent->left = node;
 			} else {
 				parent->right = node;
 			}
 		} else if (sortBy == BY_POPULARITY) {
-			if (node->movieData.popularity < parent->movieData.popularity) {
+			if (movie.popularity < parent->movieData.popularity) {
 				parent->left = node;
 			} else {
 				parent->right = node;
 			}
 		} else { // BY_REVENUE
-			if (node->movieData.revenue < parent->movieData.revenue) {
+			if (movie.revenue < parent->movieData.revenue) {
 				parent->left = node;
 			} else {
 				parent->right = node;
@@ -59,6 +62,7 @@ void redBlackTree::insert(TreeNode* node) {
 		}
 		node->parent = parent; // Set the parent pointer of the new node
 		balanceInsert(node); // Balance the tree after insertion
+		return true;
 	}
 }
 
@@ -175,7 +179,7 @@ long redBlackTree::getHighestRevenueMovie() {
 	return root->movieData.revenue; // The movie with the highest revenue will be at the root if sorted by revenue
 }
 
-void redBlackTree::searchByMovieID(long movieID) {
+Movie* redBlackTree::searchByMovieID(int64_t movieID) {
 	// Logic to search for a movie by its ID
 	TreeNode* current = root;
 	while (current != nullptr) {
@@ -201,7 +205,7 @@ void redBlackTree::searchByMovieID(long movieID) {
 			cout << "Poster Path: " << current->movieData.posterPath << endl;
 			cout << "Backdrop Path: " << current->movieData.backdropPath << endl;
 			cout << "Recommendations: " << current->movieData.recommendations << endl;
-			return; // Exit after finding the movie
+			return &(current->movieData); // Exit after finding the movie
 		} else if (movieID < current->movieData.movieID) {
 			current = current->left; // Move left
 		} else {
@@ -209,22 +213,23 @@ void redBlackTree::searchByMovieID(long movieID) {
 		}
 	}
 	cout << "Movie with ID " << movieID << " not found." << endl; // Movie not found
+	return nullptr;
 }
 
-vector <TreeNode*> redBlackTree::levelOrderTraversal() {
+vector <Movie> redBlackTree::levelOrderTraversal() {
 	// Logic to perform level order traversal of the tree
 	// Add pointers to the first 1000 nodes in the order they are visited to the result vector
-	vector<TreeNode*> result;
+	vector<Movie> result;
 	if (root == nullptr) {
 		return result; // Return empty vector if tree is empty
 	}
 	queue<TreeNode*> q;
 	int count = 0; // Counter to keep track of the number of nodes added to the result vector
 	q.push(root);
-	while (!q.empty() && count < 1000) {
+	while (!q.empty() || count < 1000) {
 		TreeNode* current = q.front();
 		q.pop();
-		result.push_back(current); // Add the current node to the result vector
+		result.push_back(current->movieData); // Add the current node to the result vector
 		count++;
 		if (current->left != nullptr) {
 			q.push(current->left); // Add left child to the queue

@@ -2,7 +2,11 @@
 #define SPLAYTREE_H
 
 #include "Movie.h"
+#include "BSTree.h"
+
 #include <vector>
+#include <queue>
+
 struct SplayNode {
     Movie data;
     SplayNode* left;
@@ -12,7 +16,7 @@ struct SplayNode {
 };
 
 
-class SplayTree {
+class SplayTree : public BSTMovie {
 private:
     SplayNode* root;
 
@@ -29,16 +33,19 @@ public:
     SplayTree();
     ~SplayTree();
 
-    void insert(const Movie& movie);
+    bool insert(const Movie& movie) override;
 
     Movie* search(int rank);
     Movie* searchByRank(int rank);
-    Movie* searchById(int id);
+    Movie* searchByMovieID(int64_t movieID) override;
     Movie* searchByRevenue(long long revenue);
 
-    bool empty() const;
+    bool isEmpty() override {
+        return !root;
+    };
     void printInOrder() const;
     std::vector<Movie> getAllMovies() const;
+    std::vector<Movie> levelOrderTraversal() override;
 };
 
 #endif

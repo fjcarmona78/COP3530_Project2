@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "Movie.h"
+#include "BSTree.h"
 
 using namespace std;
 
@@ -17,23 +18,27 @@ struct TreeNode {
 	TreeNode* parent;       // Pointer to the parent node
 	// Constructor to initialize a TreeNode with default values
 	TreeNode() : isRed(true), left(nullptr), right(nullptr) {}
+	TreeNode(Movie m) : movieData(m), isRed(true), left(nullptr), right(nullptr) {}
 };
 
 
-class redBlackTree {
+class redBlackTree : public BSTMovie {
 public:
 	enum SortType { BY_MOVIEID, BY_POPULARITY, BY_REVENUE };
 	redBlackTree(SortType sortType = BY_MOVIEID);
 
 	// Public member functions for the red-black tree creation and manipulation
-	void insert(TreeNode* node);
+	bool insert(const Movie& movie) override;
 	void rotateLeft(TreeNode* node);
 	void rotateRight(TreeNode* node);
 	void balanceInsert(TreeNode* node);
 	double getMostPopularMovie();
 	long getHighestRevenueMovie();
-	void searchByMovieID(long movieID);
-	vector <TreeNode*> levelOrderTraversal();
+	Movie* searchByMovieID(int64_t movieID) override;
+	std::vector<Movie> levelOrderTraversal() override;
+	bool isEmpty() override {
+		return !root;
+	}
 private:
 	TreeNode* root;
 	SortType sortBy;

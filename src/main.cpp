@@ -41,11 +41,15 @@ int main() {
 		treeRank->insert(m);
 	}
 
-	std::cout << "Cleaning memory up" << std::endl;
-	std::vector<Movie>().swap(movies);
-
 	WindowManager wm(true, treeRank, treeID);
 
+	std::cout << "Creating the plot" << std::endl;
+	for (auto m : movies) {
+		wm.insertGraphPoint(m.revenue, m.popularityRank);
+	}
+
+	std::cout << "Cleaning memory up" << std::endl;
+	std::vector<Movie>().swap(movies);
 
 
     while (!wm.shouldClose()) {

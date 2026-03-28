@@ -11,6 +11,7 @@
 #include "imgui/imgui.h"
 #include "imgui/backends/imgui_impl_glfw.h"
 #include "imgui/backends/imgui_impl_opengl3.h"
+#include "imgui/implot.h"
 
 #include "Movie.h"
 #include "BSTree.h"
@@ -28,6 +29,9 @@ class WindowManager {
         GLFWwindow* window = nullptr;
         bool isSplay;
 
+        std::vector<float> graphDataX;
+        std::vector<float> graphDataY;
+
         char searchBuffer[24] = "\0";
         int comboOption = 0;
 
@@ -42,6 +46,10 @@ class WindowManager {
         ~WindowManager();
         bool shouldClose() {
             return glfwWindowShouldClose(window);
+        }
+        void insertGraphPoint(int32_t revenue, double popularityRank) {
+            graphDataX.push_back((float) popularityRank);
+            graphDataY.push_back((float) revenue);
         }
         void update();
         void render();

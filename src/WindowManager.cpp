@@ -56,12 +56,17 @@ WindowManager::WindowManager(bool isSplay, BSTMovie* treeRank, BSTMovie* treeID)
     ImGui::CreateContext();
     ImGui::StyleColorsDark();
 
+    // IMPLOT INIT
+    ImPlot::CreateContext();
+
     // IMGUI + GLFW
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 150");
 }
 
 WindowManager::~WindowManager() {
+    ImPlot::DestroyContext();
+
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
@@ -83,7 +88,9 @@ void WindowManager::render() {
     ImGui::SetNextWindowPos({PADDING, PADDING});
     ImGui::SetNextWindowSize({COLUMN_WIDTH - PADDING, COLUMN_HEIGHT});
     if (ImGui::Begin("plot column", nullptr, COLUMN_FLAGS)) {
-        // TODO
+        if (ImPlot::BeginPlot("Scatter plot")) {
+            ImPlot::PlotScatter("Movie Scatter Plot", graphDataX.data(), graphDataY.data(), graphDataX.size());
+        }ImPlot::EndPlot();
     }ImGui::End();
 
     ImGui::SameLine();

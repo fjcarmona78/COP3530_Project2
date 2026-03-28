@@ -280,7 +280,8 @@ Movie* redBlackTree::searchByRank(int32_t rank) {
 				current = current->right; // Move right
 			}
 		}
-		return &(current->movieData);
+		if (current) return &(current->movieData);
+		else return nullptr;
 	}
 	else {
 		return searchRankHelper(root, rank);

@@ -41,6 +41,7 @@ public:
 	Movie* getMostPopularMovie() override;
 	Movie* getHighestRevenueMovie() override;
 	Movie* searchByMovieID(int32_t movieID) override;
+	std::vector<Movie *> searchByRevenue(int32_t revenue);
 	bool isEmpty() override {
 		return !root;
 	}

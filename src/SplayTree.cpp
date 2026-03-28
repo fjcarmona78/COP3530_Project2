@@ -248,6 +248,33 @@ Movie* SplayTree::searchByMovieID(int32_t movieID) {
     return &(result->movieData);
 }
 
+vector<Movie *> SplayTree::searchByRevenue(int32_t revenue) {
+	std::vector<Movie *> result;
+	if (root == nullptr) {
+		return result;
+	}
+
+	vector<SplayNode*> stack;
+	stack.push_back(root);
+
+	while (!stack.empty()) {
+		SplayNode* current = stack.back();
+		stack.pop_back();
+
+		if (current->movieData.revenue == revenue) {
+			result.push_back(&(current->movieData));
+		}
+		if (current->right != nullptr) {
+			stack.push_back(current->right);
+		}
+		if (current->left != nullptr) {
+			stack.push_back(current->left);
+		}
+	}
+
+	return result;
+}
+
 Movie* SplayTree::getHighestRevenueMovie() {
 	if (root == nullptr) {
 		return 0;

@@ -213,6 +213,33 @@ Movie* redBlackTree::searchByMovieID(int32_t movieID) {
 	return nullptr;
 }
 
+std::vector<Movie *> redBlackTree::searchByRevenue(int32_t revenue) {
+	std::vector<Movie *> result;
+	if (root == nullptr) {
+		return result;
+	}
+
+	vector<TreeNode*> stack;
+	stack.push_back(root);
+
+	while (!stack.empty()) {
+		TreeNode* current = stack.back();
+		stack.pop_back();
+
+		if (current->movieData.revenue == revenue) {
+			result.push_back(&(current->movieData));
+		}
+		if (current->right != nullptr) {
+			stack.push_back(current->right);
+		}
+		if (current->left != nullptr) {
+			stack.push_back(current->left);
+		}
+	}
+
+	return result;
+}
+
 Movie* redBlackTree::searchRankHelper(TreeNode* node, int32_t rank) {
 	if (node == nullptr) {
 		return nullptr;

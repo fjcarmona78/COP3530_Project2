@@ -17,7 +17,7 @@ class BSTMovie {
 
         virtual Movie* searchByRank(int32_t rank) = 0;
         virtual Movie* searchByMovieID(int32_t movieID) = 0;
-
+        virtual std::vector<Movie *> searchByRevenue(int32_t revenue) = 0;
 };
 
 #endif // BST_H

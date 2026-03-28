@@ -33,6 +33,7 @@ public:
 	Movie* searchByMovieID(int32_t movieID) override;
 	std::vector<Movie *> levelOrderTraversal() override;
 	Movie* searchByRank(int32_t rank) override;
+	vector<Movie *> searchByRevenue(int32_t revenue);
 	bool isEmpty() override {
 		return !root;
 	}

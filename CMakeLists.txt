@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
-project(Project1)
+project(Project2_CineRank_Analytics)
 
 set(CMAKE_CXX_STANDARD 14)
 

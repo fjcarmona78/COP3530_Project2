@@ -109,7 +109,7 @@ double Parser::toDouble(const string& text) {
     }
 }
 
-vector<Movie> Parser::loadMovies(const string& filename) {
+vector<Movie> Parser::loadMovies(const string& filename, const size_t& limit) {
     vector<Movie> movies;
     ifstream file(filename);
 
@@ -148,7 +148,7 @@ vector<Movie> Parser::loadMovies(const string& filename) {
     int backdropPathIndex = findColumnIndex(headers, "backdrop_path");
     int recommendationsIndex = findColumnIndex(headers, "recommendations");
 
-    while (getline(file, line)) {
+    for (size_t i = 0; i < limit || getline(file, line); i++) {
         vector<string> row = splitCSVLine(line);
 
         if (row.size() < headers.size()) {

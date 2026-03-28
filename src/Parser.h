@@ -16,7 +16,7 @@ private:
     std::string cleanText(const std::string& text);
 
 public:
-    std::vector<Movie> loadMovies(const std::string& filename);
+    std::vector<Movie> loadMovies(const std::string& filename, const size_t& limit);
     void assignPopularityRanks(std::vector<Movie>& movies);
 };
 

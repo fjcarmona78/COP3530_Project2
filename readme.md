@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/CineRank_Analytics.png" width="500" alt="CineRank Analytics Logo"/>
+  <img src="assets/CineRankAnalytics.png" width="500" alt="CineRank Analytics Logo"/>
 </p>
 
 # CineRank Analytics

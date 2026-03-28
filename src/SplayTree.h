@@ -38,8 +38,8 @@ public:
 
 	Movie* searchByRank(int rank) override;
 	vector<Movie*> levelOrderTraversal() override;
-	double getMostPopularMovie() override;
-	long getHighestRevenueMovie() override;
+	Movie* getMostPopularMovie() override;
+	Movie* getHighestRevenueMovie() override;
 	Movie* searchByMovieID(int64_t movieID) override;
 	bool isEmpty() override {
 		return !root;

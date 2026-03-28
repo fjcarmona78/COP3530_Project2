@@ -190,12 +190,12 @@ Movie* SplayTree::searchByRank(int rank) {
 	return &(result->movieData);
 }
 
-double SplayTree::getMostPopularMovie() {
+Movie* SplayTree::getMostPopularMovie() {
 	Movie* movie = searchByRank(1);
 	if (movie == nullptr) {
-		return 0.0;
+		return nullptr;
 	}
-	return movie->popularity;
+	return movie;
 }
 
 SplayNode* SplayTree::searchMovieIDHelper(SplayNode* node, long movieID) {
@@ -248,7 +248,7 @@ Movie* SplayTree::searchByMovieID(int64_t movieID) {
     return &(result->movieData);
 }
 
-long SplayTree::getHighestRevenueMovie() {
+Movie* SplayTree::getHighestRevenueMovie() {
 	if (root == nullptr) {
 		return 0;
 	}
@@ -256,14 +256,14 @@ long SplayTree::getHighestRevenueMovie() {
 	vector<SplayNode*> stack;
 	stack.push_back(root);
 
-	long bestRevenue = root->movieData.revenue;
+	Movie* bestRevenue = &(root->movieData);
 
 	while (!stack.empty()) {
 		SplayNode* current = stack.back();
 		stack.pop_back();
 
-		if (current->movieData.revenue > bestRevenue) {
-			bestRevenue = current->movieData.revenue;
+		if (current->movieData.revenue > bestRevenue->revenue) {
+			bestRevenue = &(current->movieData);
 		}
 
 		if (current->right != nullptr) {
@@ -294,7 +294,8 @@ vector<Movie*> SplayTree::levelOrderTraversal() {
 	queue<SplayNode*> q;
 	q.push(root);
 
-	while (!q.empty()) {
+	int count = 0;
+	while (!q.empty() || count < 300) {
 		SplayNode* current = q.front();
 		q.pop();
 
@@ -306,6 +307,7 @@ vector<Movie*> SplayTree::levelOrderTraversal() {
 		if (current->right != nullptr) {
 			q.push(current->right);
 		}
+		count++;
 	}
 
 	return result;

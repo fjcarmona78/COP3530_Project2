@@ -12,8 +12,8 @@ class BSTMovie {
 
         virtual std::vector<Movie *> levelOrderTraversal() = 0;
 
-        virtual double getMostPopularMovie() = 0;
-        virtual long getHighestRevenueMovie() = 0;
+        virtual Movie* getMostPopularMovie() = 0;
+        virtual Movie* getHighestRevenueMovie() = 0;
 
         virtual Movie* searchByRank(int rank) = 0;
         virtual Movie* searchByMovieID(int64_t movieID) = 0;

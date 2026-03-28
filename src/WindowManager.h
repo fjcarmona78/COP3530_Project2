@@ -22,7 +22,7 @@ class WindowManager {
         const float PADDING = 4.0;
         const float COLUMN_HEIGHT = height - 2*PADDING;
         const int COLUMN_FLAGS =  ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBringToFrontOnFocus;
-        const char *comboItems[3] = {"Movie ID", "Popularity", "Revenue"};
+        const char *comboItems[3] = {"Movie ID", "Popularity Rank", "Revenue"};
 
         GLFWwindow* window = nullptr;
         bool isSplay;
@@ -31,12 +31,13 @@ class WindowManager {
         int comboOption = 0;
 
         std::vector<double> times;
-        BSTMovie* tree = nullptr;
+        BSTMovie* treeRank = nullptr;
+        BSTMovie* treeID = nullptr;
 
-        void search(int64_t input);
+        void search(int32_t input);
     public:
         std::vector<Movie *> moviesDisplayed;
-        WindowManager(bool isSplay, BSTMovie* tree);
+        WindowManager(bool isSplay, BSTMovie* treeRank, BSTMovie* treeID);
         ~WindowManager();
         bool shouldClose() {
             return glfwWindowShouldClose(window);

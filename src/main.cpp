@@ -18,12 +18,15 @@ int main() {
 		std::cin >> opt;
 	} while (!(opt == 1 || opt == 0));
 	
-	BSTMovie *tree;
+	BSTMovie *treeRank;
+	BSTMovie *treeID;
 	if (opt == 0) {
-		tree = new SplayTree();
+		treeID = new SplayTree();
+		treeRank = new SplayTree(BY_RANK);
 	}
 	else {
-		tree = new redBlackTree();
+		treeRank = new redBlackTree(BY_RANK);
+		treeID = new redBlackTree();
 	}
 
 	Parser parser;
@@ -34,13 +37,14 @@ int main() {
 
 	std::cout << "Inserting movies into the tree" << std::endl;
 	for (auto m : movies) {
-		tree->insert(m);
+		treeID->insert(m);
+		treeRank->insert(m);
 	}
 
 	std::cout << "Cleaning memory up" << std::endl;
 	std::vector<Movie>().swap(movies);
 
-	WindowManager wm(true, tree);
+	WindowManager wm(true, treeRank, treeID);
 
 
 

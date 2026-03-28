@@ -1,12 +1,14 @@
 #include "WindowManager.h"
 
-void WindowManager::search(int64_t input) {
+void WindowManager::search(int32_t input) {
     switch(comboOption) {
         case 0:
-            moviesDisplayed.push_back(tree->searchByMovieID(input));
+            moviesDisplayed.push_back(treeID->searchByMovieID(input));
             break;
         case 1:
-            moviesDisplayed.push_back(tree->searchByRank(input));
+            moviesDisplayed.push_back(treeRank->searchByRank(input));
+        case 2:
+            moviesDisplayed = treeID->searchByRevenue(input);
     };
 
     if (moviesDisplayed[0] == nullptr) {
@@ -14,10 +16,10 @@ void WindowManager::search(int64_t input) {
     }
 }
 
-WindowManager::WindowManager(bool isSplay, BSTMovie* tree) {
-
+WindowManager::WindowManager(bool isSplay, BSTMovie* treeRank, BSTMovie* treeID) {
     this->isSplay = isSplay;
-    this->tree = tree;
+    this->treeID = treeID;
+    this->treeRank = treeRank;
     // GLFW INIT
     if (!glfwInit()) {
         throw std::runtime_error("Failed to initialize GLFW!");
@@ -86,13 +88,13 @@ void WindowManager::render() {
             moviesDisplayed.clear();
             std::string searchResult(searchBuffer);
             if (searchResult == "List") {
-                moviesDisplayed = tree->levelOrderTraversal();
+                moviesDisplayed = treeID->levelOrderTraversal();
             }
             else if (searchResult == "popular") {
-                moviesDisplayed.push_back(tree->getMostPopularMovie());
+                moviesDisplayed.push_back(treeRank->getMostPopularMovie());
             }
             else if (searchResult == "revenue") {
-                moviesDisplayed.push_back(tree->getHighestRevenueMovie());
+                moviesDisplayed.push_back(treeRank->getHighestRevenueMovie());
             }
             else {
                 try {
@@ -122,7 +124,7 @@ void WindowManager::render() {
         for (auto movie : moviesDisplayed) {
             if (!movie) continue;
             ImGui::Separator();
-            ImGui::Text("ID: %lli", movie->movieID);
+            ImGui::Text("ID: %i", movie->movieID);
             ImGui::TextWrapped("Title: %s", movie->title.c_str());
             ImGui::TextWrapped("Genre: %s", movie->genre.c_str());
             ImGui::TextWrapped("Original Language: %s", movie->originalLanguage.c_str());
@@ -130,8 +132,8 @@ void WindowManager::render() {
             ImGui::Text("Popularity: %f", movie->popularity);
             ImGui::TextWrapped("Production Companies: %s", movie->productionCompanies.c_str());
             ImGui::Text("Release Date: %s", movie->releaseDate.c_str());
-            ImGui::Text("Budget: %lli", movie->budget);
-            ImGui::Text("Revenue: %lli", movie->revenue);
+            ImGui::Text("Budget: %i", movie->budget);
+            ImGui::Text("Revenue: %i", movie->revenue);
             ImGui::Text("Runtime: %d minutes", movie->runtime);
             ImGui::Text("Status: %s", movie->status.c_str());
             ImGui::Text("Tagline: %s", movie->tagline.c_str());

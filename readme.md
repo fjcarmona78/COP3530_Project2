@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/CineRank_Analytics.png" width="500" alt="CineRank Analytics Logo"/>
+</p>
+
 # CineRank Analytics
 
 A C++ application that loads and indexes a large movie dataset using two self-balancing tree structures — a Red-Black Tree and a Splay Tree. Users can search, rank, and analyze movies through an interactive GUI built with ImGui and GLFW.

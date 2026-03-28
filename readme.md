@@ -75,18 +75,18 @@ test/
 
 ### Splay Tree
 
-| Operation | Worst Case | Amortized | Notes |
+| Operation | Complexity | Amortized | Notes |
 |---|---|---|---|
-| Insert | O(n) | O(log n) | Worst case on degenerate tree |
-| Search by Movie ID (BY_MOVIEID) | O(n) | O(log n) | Splay worst case |
-| Search by Rank (BY_RANK) | O(n) | O(log n) | Splay worst case |
-| Search by Movie ID (BY_RANK) | O(n) | — | Full traversal fallback |
-| Search by Rank (BY_MOVIEID) | O(n) | — | Full traversal fallback |
-| Get Most Popular Movie | O(n) | O(log n) | Calls searchByRank |
-| Get Highest Revenue Movie | O(n) | — | Full traversal, no revenue index |
-| Search by Revenue | O(n) | — | Full traversal, no revenue index |
-| Level Order Traversal | O(min(n, 300)) | — | Capped at 300 nodes |
-| Destroy Tree | O(n) | — | Must visit every node |
+| Insert | O(n) | Worst case on degenerate tree |
+| Search by Movie ID (BY_MOVIEID) | O(n) | Splay worst case |
+| Search by Rank (BY_RANK) | O(n) | Splay worst case |
+| Search by Movie ID (BY_RANK) | O(n) | Full traversal fallback |
+| Search by Rank (BY_MOVIEID) | O(n) | Full traversal fallback |
+| Get Most Popular Movie | O(n) | Calls searchByRank |
+| Get Highest Revenue Movie | O(n) | Full traversal, no revenue index |
+| Search by Revenue | O(n) | Full traversal, no revenue index |
+| Level Order Traversal | O(min(n, 300)) | Capped at 300 nodes |
+| Destroy Tree | O(n) | Must visit every node |
 
 ### Key Observations
 

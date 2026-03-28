@@ -296,7 +296,7 @@ TEST_CASE("Splay tree getMostPopularMovie returns popularity of rank 1 movie", "
     node3.popularityRank = 1;
     tree.insert(node3);
 
-    REQUIRE(tree.getMostPopularMovie() == 40.0);
+    REQUIRE(tree.getMostPopularMovie()->popularity == 40.0);
 }
 
 TEST_CASE("Splay tree getHighestRevenueMovie returns highest revenue value", "[splay][helper]") {
@@ -314,5 +314,5 @@ TEST_CASE("Splay tree getHighestRevenueMovie returns highest revenue value", "[s
     node3.popularityRank = 1;
     tree.insert(node3);
 
-    REQUIRE(tree.getHighestRevenueMovie() == 5000);
+    REQUIRE(tree.getHighestRevenueMovie()->revenue == 5000);
 }

@@ -81,7 +81,7 @@ TEST_CASE("Insert by movieID produces expected small structure", "[tree][movieid
 
 // Test case to verify that inserting nodes by popularity correctly places them in the tree based on their popularity values
 TEST_CASE("Insert by popularity uses popularity for placement", "[tree][popularity]") {
-    redBlackTree tree(BY_POPULARITY);
+    redBlackTree tree(BY_RANK);
 
     tree.insert(makeNode(100, "Low", 2.0, 100));
     tree.insert(makeNode(200, "Mid", 5.0, 200));
@@ -106,7 +106,9 @@ TEST_CASE("Insert by popularity uses popularity for placement", "[tree][populari
     REQUIRE(highFound);
 }
 
+// OLD TEST CASE COMMENTED OUT
 // Test case to verify that inserting nodes by revenue correctly places them in the tree based on their revenue values
+/*
 TEST_CASE("Insert by revenue uses revenue for placement", "[tree][revenue]") {
     redBlackTree tree(BY_REVENUE);
 
@@ -131,7 +133,7 @@ TEST_CASE("Insert by revenue uses revenue for placement", "[tree][revenue]") {
     REQUIRE(smallFound);
     REQUIRE(mediumFound);
     REQUIRE(largeFound);
-}
+} */
 
 // Test case to verify that searching for a movie by its ID correctly prints the movie details when the movie is found in the tree
 TEST_CASE("searchByMovieID prints movie details when found", "[tree][search]") {

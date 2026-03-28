@@ -45,6 +45,8 @@ add_executable(Main
         src/RBTree.cpp
         src/RBTree.h 
         src/WindowManager.cpp
+        src/imgui/implot_items.cpp
+        src/imgui/implot.cpp
         )
         
 target_link_libraries(Main PRIVATE glfw opengl32)

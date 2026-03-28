@@ -94,10 +94,10 @@ test/
 
 ### Key Observations
 
-- The **Red-Black Tree is strictly better** in worst case — O(log n) vs O(n) for insert and search
+- The **Red-Black Tree is strictly better** in worst case, O(log n) vs O(n) for insert and search
 - The **Splay Tree has O(log n) amortized** performance, making it efficient over a sequence of operations even if individual operations can be slow
 - Both trees cap `levelOrderTraversal` at 300 nodes, making it effectively O(1) once the tree is large enough
-- `searchByRevenue` is O(n) on both trees since neither is organized by revenue — a separate revenue-indexed structure would be needed to improve this
+- `searchByRevenue` is O(n) on both trees since neither is organized by revenue, a separate revenue-indexed structure would be needed to improve this
 
 ---
 

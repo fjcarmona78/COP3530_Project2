@@ -1,17 +1,29 @@
 #include "WindowManager.h"
 
 void WindowManager::search(int32_t input) {
-    switch(comboOption) {
-        case 0:
-            moviesDisplayed.push_back(treeID->searchByMovieID(input));
-            break;
-        case 1:
-            moviesDisplayed.push_back(treeRank->searchByRank(input));
-        case 2:
-            moviesDisplayed = treeID->searchByRevenue(input);
-    };
+    if (comboOption == 0) {
+        auto start = std::chrono::high_resolution_clock::now();
+        moviesDisplayed.push_back(treeID->searchByMovieID(input));
+        auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> time = end - start;
+        times.push_back(time.count());
+    }
+    else if (comboOption == 1) {
+        auto start = std::chrono::high_resolution_clock::now();
+        moviesDisplayed.push_back(treeRank->searchByRank(input));
+        auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> time = end - start;
+        times.push_back(time.count());
+    }
+    else {
+        auto start = std::chrono::high_resolution_clock::now();
+        moviesDisplayed = treeID->searchByRevenue(input);
+        auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> time = end - start;
+        times.push_back(time.count());
+    }
 
-    if (moviesDisplayed[0] == nullptr) {
+    if (!moviesDisplayed.empty() &&  moviesDisplayed[0] == nullptr) {
         moviesDisplayed.clear();
     }
 }

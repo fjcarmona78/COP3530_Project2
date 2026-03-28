@@ -69,7 +69,8 @@ test/
 | Operation | Complexity | Notes |
 |---|---|---|
 | Insert | O(log n) | RB tree guarantees balanced height |
-| Search by Movie ID | O(log n) | BST search on balanced tree |
+| Search by Movie ID (BY_MOVIEID) | O(log n) | BST search on balanced tree |
+| Search by Movie ID (BY_RANK) | O(n) | BST search on balanced tree |
 | Search by Rank (BY_RANK) | O(log n) | BST search on balanced tree |
 | Search by Rank (BY_MOVIEID) | O(n) | Falls back to full traversal |
 | Get Most Popular Movie | O(n) | Full traversal, no popularity index |
@@ -103,7 +104,7 @@ test/
 
 ## Unit Tests
 
-14 tests across two suites using Catch2. Run via Visual Studio's Test Explorer or from the command line with CTest.
+14 tests (40 assertions) across two suites using Catch2. Run via Visual Studio's Test Explorer or from the command line with CTest.
 
 ### RedBlackTreeTests (6 tests)
 - Empty tree level order is empty

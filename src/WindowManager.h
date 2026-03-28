@@ -3,19 +3,40 @@
 
 #include <GLFW/glfw3.h>
 #include <stdexcept>
+#include <vector>
+#include <stack>
+#include <iostream>
 
 #include "imgui/imgui.h"
 #include "imgui/backends/imgui_impl_glfw.h"
 #include "imgui/backends/imgui_impl_opengl3.h"
 
+#include "Movie.h"
+#include "BSTree.h"
+
 class WindowManager {
     private:
-        const int width = 800;
-        const int height = 600; 
-        GLFWwindow* window = nullptr;
+        const float width = 1200;
+        const float height = 720; 
+        const float COLUMN_WIDTH = width/4.0;
+        const float PADDING = 4.0;
+        const float COLUMN_HEIGHT = height - 2*PADDING;
+        const int COLUMN_FLAGS =  ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBringToFrontOnFocus;
+        const char *comboItems[3] = {"Movie ID", "Popularity", "Revenue"};
 
+        GLFWwindow* window = nullptr;
+        bool isSplay;
+
+        char searchBuffer[24] = "\0";
+        int comboOption = 0;
+
+        std::vector<double> times;
+        BSTMovie* tree = nullptr;
+
+        void search(int64_t input);
     public:
-        WindowManager();
+        std::vector<Movie *> moviesDisplayed;
+        WindowManager(bool isSplay, BSTMovie* tree);
         ~WindowManager();
         bool shouldClose() {
             return glfwWindowShouldClose(window);

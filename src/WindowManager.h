@@ -7,6 +7,7 @@
 #include <stack>
 #include <iostream>
 #include <chrono>
+#include <cmath>
 
 #include "imgui/imgui.h"
 #include "imgui/backends/imgui_impl_glfw.h"
@@ -32,6 +33,12 @@ class WindowManager {
         std::vector<float> graphDataX;
         std::vector<float> graphDataY;
 
+        double meanX = 0;
+        double meanY = 0;
+        double stddevx = 0;
+        double stddevy = 0;
+        double r = 0;
+
         char searchBuffer[24] = "\0";
         int comboOption = 0;
 
@@ -47,12 +54,13 @@ class WindowManager {
         bool shouldClose() {
             return glfwWindowShouldClose(window);
         }
-        void insertGraphPoint(int32_t revenue, double popularityRank) {
-            graphDataX.push_back((float) popularityRank);
-            graphDataY.push_back((float) revenue);
+        void insertGraphPoint(int32_t revenue, double popularity) {
+            graphDataY.push_back((float) popularity);
+            graphDataX.push_back((float) revenue);
         }
         void update();
         void render();
+        void calculateStats();
 };
 
 #endif // WindowManagerMANAGER_H

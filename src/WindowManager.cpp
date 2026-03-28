@@ -91,6 +91,16 @@ void WindowManager::render() {
         if (ImPlot::BeginPlot("Scatter plot")) {
             ImPlot::PlotScatter("Movie Scatter Plot", graphDataX.data(), graphDataY.data(), graphDataX.size());
         }ImPlot::EndPlot();
+
+        ImGui::Separator();
+
+        ImGui::Text("Mean Revenue: %f", meanX);
+        ImGui::Text("Mean Popularity: %f", meanY);
+        ImGui::Text("Std. deviation revenue: %f", stddevx);
+        ImGui::Text("Std. deviation popularity: %f", stddevy);
+        ImGui::Text("R: %f", r);
+        ImGui::Text("R^2: %f", r*r);
+
     }ImGui::End();
 
     ImGui::SameLine();
@@ -198,4 +208,37 @@ void WindowManager::render() {
     glClear(GL_COLOR_BUFFER_BIT);
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     glfwSwapBuffers(window);
+}
+
+void WindowManager::calculateStats() {
+    for (float x : graphDataX) {
+        meanX += x;
+    }
+
+    for (float y : graphDataY) {
+        meanY += y;
+    }
+
+    meanX /= graphDataX.size();
+    meanY /= graphDataY.size();
+
+    for (float x : graphDataX) {
+        stddevx += (x - meanX) * (x - meanX);
+    }
+
+    for (float y : graphDataY) {
+        stddevy += (y - meanY) * (y - meanY);
+    }
+
+    stddevx /= graphDataX.size();
+    stddevy /= graphDataY.size();
+
+    stddevx = std::sqrt(stddevx);
+    stddevy = std::sqrt(stddevy);
+
+    for (size_t i = 0; i < graphDataX.size(); i++) {
+        r += (graphDataX[i] - meanX) * (graphDataY[i] - meanY);
+    }
+
+    r /= graphDataX.size() * stddevx * stddevy;
 }

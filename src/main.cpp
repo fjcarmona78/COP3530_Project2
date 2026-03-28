@@ -32,7 +32,7 @@ int main() {
 	Parser parser;
 
 	std::cout << "Parsing the File" << std::endl;
-	std::vector<Movie> movies = parser.loadMovies("../src/first120k.csv", 150);
+	std::vector<Movie> movies = parser.loadMovies("../src/first120k.csv", 120000);
 	parser.assignPopularityRanks(movies);
 
 	std::cout << "Inserting movies into the tree" << std::endl;
@@ -45,12 +45,13 @@ int main() {
 
 	std::cout << "Creating the plot" << std::endl;
 	for (auto m : movies) {
-		wm.insertGraphPoint(m.revenue, m.popularityRank);
+		wm.insertGraphPoint(m.revenue, m.popularity);
 	}
+
+	wm.calculateStats();
 
 	std::cout << "Cleaning memory up" << std::endl;
 	std::vector<Movie>().swap(movies);
-
 
     while (!wm.shouldClose()) {
 		wm.update();

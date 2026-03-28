@@ -17,8 +17,8 @@ struct TreeNode {
 	TreeNode* right;        // Pointer to the right child node
 	TreeNode* parent;       // Pointer to the parent node
 	// Constructor to initialize a TreeNode with default values
-	TreeNode() : isRed(true), left(nullptr), right(nullptr) {}
-	TreeNode(Movie m) : movieData(m), isRed(true), left(nullptr), right(nullptr) {}
+	TreeNode() : isRed(true), left(nullptr), right(nullptr), parent(nullptr) {}
+	TreeNode(Movie m) : movieData(m), isRed(true), left(nullptr), right(nullptr), parent(nullptr) {}
 };
 
 

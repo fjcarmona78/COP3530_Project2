@@ -109,7 +109,7 @@ void redBlackTree::balanceInsert(TreeNode* node) {
 	// Balancing logic after insertion
 	TreeNode* parent = nullptr;
 	TreeNode* grandparent = nullptr;
-	while (node->parent && node->parent->parent  && node->isRed && node->parent->isRed) {
+	while (node != root  && node->isRed && node->parent->isRed) {
 		parent = node->parent;
 		grandparent = parent->parent;
 		if (parent == grandparent->left) {

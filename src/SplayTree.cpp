@@ -295,7 +295,7 @@ vector<Movie*> SplayTree::levelOrderTraversal() {
 	q.push(root);
 
 	int count = 0;
-	while (!q.empty() || count < 300) {
+	while (!q.empty() && count < 300) {
 		SplayNode* current = q.front();
 		q.pop();
 

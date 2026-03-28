@@ -56,7 +56,7 @@ class WindowManager {
         }
         void insertGraphPoint(int32_t revenue, double popularity) {
             graphDataY.push_back((float) popularity);
-            graphDataX.push_back((float) revenue);
+            graphDataX.push_back((float) revenue/1000000.0);
         }
         void update();
         void render();

@@ -89,7 +89,7 @@ void WindowManager::render() {
     ImGui::SetNextWindowSize({COLUMN_WIDTH - PADDING, COLUMN_HEIGHT});
     if (ImGui::Begin("plot column", nullptr, COLUMN_FLAGS)) {
         if (ImPlot::BeginPlot("Scatter plot")) {
-            ImPlot::PlotScatter("popularity vs. revenue", graphDataX.data(), graphDataY.data(), graphDataX.size());
+            ImPlot::PlotScatter("popularity vs. revenue (M)", graphDataX.data(), graphDataY.data(), graphDataX.size());
         }ImPlot::EndPlot();
 
         ImGui::Separator();

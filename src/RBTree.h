@@ -28,8 +28,8 @@ public:
 
 	// Public member functions for the red-black tree creation and manipulation
 	bool insert(const Movie& movie) override;
-	double getMostPopularMovie() override;
-	long getHighestRevenueMovie() override;
+	Movie* getMostPopularMovie() override;
+	Movie* getHighestRevenueMovie() override;
 	Movie* searchByMovieID(int64_t movieID) override;
 	std::vector<Movie *> levelOrderTraversal() override;
 	Movie* searchByRank(int rank) override;

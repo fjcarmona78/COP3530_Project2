@@ -109,7 +109,7 @@ void redBlackTree::balanceInsert(TreeNode* node) {
 	// Balancing logic after insertion
 	TreeNode* parent = nullptr;
 	TreeNode* grandparent = nullptr;
-	while (node != root && node->isRed && node->parent->isRed) {
+	while (node->parent && node->parent->parent  && node->isRed && node->parent->isRed) {
 		parent = node->parent;
 		grandparent = parent->parent;
 		if (parent == grandparent->left) {
@@ -151,33 +151,63 @@ void redBlackTree::balanceInsert(TreeNode* node) {
 	root->isRed = false; // Ensure the root is always black
 }
 
-double redBlackTree::getMostPopularMovie() {
-	// Logic to retrieve the most popular movie
-	// Make sure tree is sorted by popularity before calling this function
-	if (sortBy != BY_POPULARITY) {
-		redBlackTree* popularityTree = new redBlackTree(BY_POPULARITY);
-		// Logic to populate popularityTree with the same nodes as the current tree
-		if (popularityTree->root == nullptr) {
-			return 0.0; // No movies in the tree
-		}
-		//TreeNode* current = popularityTree->root;
+Movie* redBlackTree::getMostPopularMovie() {
+	if (root == nullptr) {
+		std::cout << "null root" << std::endl;
+		return nullptr;
 	}
-	return root->movieData.popularity; // The most popular movie will be at the root if sorted by popularity
-	
-}	
 
-long redBlackTree::getHighestRevenueMovie() {
-	// Logic to retrieve the movie with the highest revenue
-	// Make sure tree is sorted by revenue before calling this function
-	if (sortBy != BY_REVENUE) {
-		redBlackTree* revenueTree = new redBlackTree(BY_REVENUE);
-		// Logic to populate revenueTree with the same nodes as the current tree
-		if (revenueTree->root == nullptr) {
-			return 0; // No movies in the tree
+	vector<TreeNode*> stack;
+	stack.push_back(root);
+
+	Movie* mostPop = &(root->movieData);
+
+	while (!stack.empty()) {
+		TreeNode* current = stack.back();
+		stack.pop_back();
+
+		if (current->movieData.popularity > mostPop->popularity) {
+			mostPop = &(current->movieData);
 		}
-		//TreeNode* current = revenueTree->root;
+
+		if (current->right != nullptr) {
+			stack.push_back(current->right);
+		}
+		if (current->left != nullptr) {
+			stack.push_back(current->left);
+		}
 	}
-	return root->movieData.revenue; // The movie with the highest revenue will be at the root if sorted by revenue
+
+	return mostPop;
+}
+
+Movie* redBlackTree::getHighestRevenueMovie() {
+	if (root == nullptr) {
+		return 0;
+	}
+
+	vector<TreeNode*> stack;
+	stack.push_back(root);
+
+	Movie* bestRevenue = &(root->movieData);
+
+	while (!stack.empty()) {
+		TreeNode* current = stack.back();
+		stack.pop_back();
+
+		if (current->movieData.revenue > bestRevenue->revenue) {
+			bestRevenue = &(current->movieData);
+		}
+
+		if (current->right != nullptr) {
+			stack.push_back(current->right);
+		}
+		if (current->left != nullptr) {
+			stack.push_back(current->left);
+		}
+	}
+
+	return bestRevenue;
 }
 
 Movie* redBlackTree::searchByMovieID(int64_t movieID) {
@@ -237,7 +267,7 @@ vector <Movie*> redBlackTree::levelOrderTraversal() {
 	queue<TreeNode*> q;
 	int count = 0; // Counter to keep track of the number of nodes added to the result vector
 	q.push(root);
-	while (!q.empty() && count < 1000) {
+	while (!q.empty() && count < 300) {
 		TreeNode* current = q.front();
 		q.pop();
 		result.push_back(&(current->movieData)); // Add the current node to the result vector

@@ -288,26 +288,30 @@ Movie* redBlackTree::searchByRank(int32_t rank) {
 }
 
 vector <Movie*> redBlackTree::levelOrderTraversal() {
-	// Logic to perform level order traversal of the tree
-	// Add pointers to the first 1000 nodes in the order they are visited to the result vector
-	vector<Movie *> result;
+	vector<Movie*> result;
+
 	if (root == nullptr) {
-		return result; // Return empty vector if tree is empty
+		return result;
 	}
-	queue<TreeNode*> q;
-	int count = 0; // Counter to keep track of the number of nodes added to the result vector
+
+	queue<TreeNode *> q;
 	q.push(root);
+
+	int count = 0;
 	while (!q.empty() && count < 300) {
 		TreeNode* current = q.front();
 		q.pop();
-		result.push_back(&(current->movieData)); // Add the current node to the result vector
-		count++;
+
+		result.push_back(&(current->movieData));
+
 		if (current->left != nullptr) {
-			q.push(current->left); // Add left child to the queue
+			q.push(current->left);
 		}
 		if (current->right != nullptr) {
-			q.push(current->right); // Add right child to the queue
+			q.push(current->right);
 		}
+		count++;
 	}
+
 	return result; // Return the vector containing pointers to the first 1000 nodes in level order
 }

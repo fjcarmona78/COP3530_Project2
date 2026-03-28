@@ -41,7 +41,8 @@ int main() {
 		treeRank->insert(m);
 	}
 
-	WindowManager wm(true, treeRank, treeID);
+	bool temp = opt == 1 ? false : true;
+	WindowManager wm(temp, treeRank, treeID);
 
 	std::cout << "Creating the plot" << std::endl;
 	for (auto m : movies) {

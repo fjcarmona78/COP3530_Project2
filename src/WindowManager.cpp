@@ -117,7 +117,12 @@ void WindowManager::render() {
             moviesDisplayed.clear();
             std::string searchResult(searchBuffer);
             if (searchResult == "List") {
-                moviesDisplayed = treeID->levelOrderTraversal();
+                if (!isSplay) {
+                    moviesDisplayed = treeRank->levelOrderTraversal();
+                }
+                else {
+                    moviesDisplayed = treeID->levelOrderTraversal();
+                }
             }
             else if (searchResult == "popular") {
                 moviesDisplayed.push_back(treeRank->getMostPopularMovie());

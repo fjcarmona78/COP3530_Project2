@@ -26,16 +26,10 @@ bool redBlackTree::insert(const Movie& movie) {
 				} else {
 					current = current->right;
 				}
-			} else if (sortBy == BY_POPULARITY) {
-				if (movie.popularity < current->movieData.popularity) {
+			} else if (sortBy == BY_RANK) {
+				if (movie.popularityRank < current->movieData.popularityRank) {
 					current = current->left;
 				} else  {
-					current = current->right;
-				}
-			} else { // BY_REVENUE
-				if (movie.revenue < current->movieData.revenue) {
-					current = current->left;
-				} else {
 					current = current->right;
 				}
 			}
@@ -48,19 +42,13 @@ bool redBlackTree::insert(const Movie& movie) {
 			} else {
 				parent->right = node;
 			}
-		} else if (sortBy == BY_POPULARITY) {
-			if (movie.popularity < parent->movieData.popularity) {
+		} else if (sortBy == BY_RANK) {
+			if (movie.popularityRank < parent->movieData.popularityRank) {
 				parent->left = node;
 			} else {
 				parent->right = node;
 			}
-		} else { // BY_REVENUE
-			if (movie.revenue < parent->movieData.revenue) {
-				parent->left = node;
-			} else {
-				parent->right = node;
-			}
-		}
+		} 
 		node->parent = parent; // Set the parent pointer of the new node
 		balanceInsert(node); // Balance the tree after insertion
 		return true;
@@ -210,7 +198,7 @@ Movie* redBlackTree::getHighestRevenueMovie() {
 	return bestRevenue;
 }
 
-Movie* redBlackTree::searchByMovieID(int64_t movieID) {
+Movie* redBlackTree::searchByMovieID(int32_t movieID) {
 	// Logic to search for a movie by its ID
 	TreeNode* current = root;
 	while (current != nullptr) {
@@ -225,7 +213,7 @@ Movie* redBlackTree::searchByMovieID(int64_t movieID) {
 	return nullptr;
 }
 
-Movie* redBlackTree::searchRankHelper(TreeNode* node, int rank) {
+Movie* redBlackTree::searchRankHelper(TreeNode* node, int32_t rank) {
 	if (node == nullptr) {
 		return nullptr;
 	}
@@ -253,8 +241,23 @@ Movie* redBlackTree::searchRankHelper(TreeNode* node, int rank) {
 	return nullptr;
 }
 
-Movie* redBlackTree::searchByRank(int rank) {
-	return searchRankHelper(root, rank);
+Movie* redBlackTree::searchByRank(int32_t rank) {
+	if (sortBy == BY_RANK) {
+		TreeNode* current = root;
+		while (current != nullptr) {
+			if (current->movieData.popularityRank == rank) {
+				return &(current->movieData); // Exit after finding the movie
+			} else if (rank < current->movieData.popularityRank) {
+				current = current->left; // Move left
+			} else {
+				current = current->right; // Move right
+			}
+		}
+		return &(current->movieData);
+	}
+	else {
+		return searchRankHelper(root, rank);
+	}
 }
 
 vector <Movie*> redBlackTree::levelOrderTraversal() {

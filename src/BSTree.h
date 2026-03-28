@@ -15,8 +15,8 @@ class BSTMovie {
         virtual Movie* getMostPopularMovie() = 0;
         virtual Movie* getHighestRevenueMovie() = 0;
 
-        virtual Movie* searchByRank(int rank) = 0;
-        virtual Movie* searchByMovieID(int64_t movieID) = 0;
+        virtual Movie* searchByRank(int32_t rank) = 0;
+        virtual Movie* searchByMovieID(int32_t movieID) = 0;
 
 };
 

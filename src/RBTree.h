@@ -30,17 +30,17 @@ public:
 	bool insert(const Movie& movie) override;
 	Movie* getMostPopularMovie() override;
 	Movie* getHighestRevenueMovie() override;
-	Movie* searchByMovieID(int64_t movieID) override;
+	Movie* searchByMovieID(int32_t movieID) override;
 	std::vector<Movie *> levelOrderTraversal() override;
-	Movie* searchByRank(int rank) override;
+	Movie* searchByRank(int32_t rank) override;
 	bool isEmpty() override {
 		return !root;
 	}
 private:
 	TreeNode* root;
 	SortType sortBy;
-	Movie* searchRankHelper(TreeNode *node, int rank);
-	void rotateLeft(TreeNode* node);
-	void rotateRight(TreeNode* node);
+	Movie* searchRankHelper(TreeNode *node, int32_t rank);
+    void rotateLeft(TreeNode *node);
+    void rotateRight(TreeNode* node);
 	void balanceInsert(TreeNode* node);
 };

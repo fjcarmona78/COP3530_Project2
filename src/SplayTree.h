@@ -22,7 +22,7 @@ private:
 
 	SplayNode* rightRotate(SplayNode* x);
 	SplayNode* leftRotate(SplayNode* x);
-	SplayNode* splay(SplayNode* currentRoot, long key);
+	SplayNode* splay(SplayNode* currentRoot, int32_t key);
 	SplayNode* insert(SplayNode* currentRoot, const Movie& movie);
 	SplayNode* searchMovieIDHelper(SplayNode* node, long movieID);
 
@@ -40,7 +40,7 @@ public:
 	vector<Movie*> levelOrderTraversal() override;
 	Movie* getMostPopularMovie() override;
 	Movie* getHighestRevenueMovie() override;
-	Movie* searchByMovieID(int64_t movieID) override;
+	Movie* searchByMovieID(int32_t movieID) override;
 	bool isEmpty() override {
 		return !root;
 	}

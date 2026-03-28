@@ -52,7 +52,7 @@ SplayNode* SplayTree::leftRotate(SplayNode* x) {
 	return y;
 }
 
-SplayNode* SplayTree::splay(SplayNode* currentRoot, long key) {
+SplayNode* SplayTree::splay(SplayNode* currentRoot, int32_t key) {
 	if (currentRoot == nullptr) {
 		return nullptr;
 	}
@@ -115,10 +115,10 @@ SplayNode* SplayTree::insert(SplayNode* currentRoot, const Movie& movie) {
 		return new SplayNode(movie);
 	}
 
-	long movieKey = getKey(movie);
+	int32_t movieKey = getKey(movie);
 	currentRoot = splay(currentRoot, movieKey);
 
-	long currentKey = getKey(currentRoot->movieData);
+	int32_t currentKey = getKey(currentRoot->movieData);
 
 	if (movieKey < currentKey) {
 		SplayNode* newNode = new SplayNode(movie);
@@ -237,7 +237,7 @@ SplayNode* SplayTree::searchMovieIDHelper(SplayNode* node, long movieID) {
 	return nullptr;
 }
 
-Movie* SplayTree::searchByMovieID(int64_t movieID) {
+Movie* SplayTree::searchByMovieID(int32_t movieID) {
 	SplayNode* result = searchMovieIDHelper(root, movieID);
 
 	if (result == nullptr) {
